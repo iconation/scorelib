@@ -1,0 +1,16 @@
+{
+    "uri": "https://test-ctz.solidwallet.io/api/v3",
+    "nid": "0x2",
+    "keyStore": "./config/euljiro/keystores/operator.icx",
+    "to": "cx0000000000000000000000000000000000000000",
+    "deploy": {
+        "stepLimit": "0x19a000000",
+        "contentType": "zip",
+        "mode": "install",
+        "scoreParams": {}
+    },
+    "txresult": {},
+    "transfer": {
+        "stepLimit": "0xf4240"
+    }
+}

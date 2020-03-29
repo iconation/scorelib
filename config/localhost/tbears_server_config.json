@@ -1,0 +1,65 @@
+{
+    "hostAddress": "127.0.0.1",
+    "port": 9000,
+    "scoreRootPath": "../.score",
+    "stateDbRootPath": "../.statedb",
+    "log": {
+        "logger": "tbears",
+        "level": "warning",
+        "filePath": "./logs/tbears.log",
+        "colorLog": true,
+        "outputType": "file",
+        "rotate": {
+            "type": "bytes",
+            "maxBytes": 1048576000,
+            "backupCount": 10
+        }
+    },
+    "service": {
+        "fee": true,
+        "audit": false,
+        "deployerWhiteList": false
+    },
+    "genesis": {
+        "nid": "0x3",
+        "accounts": [
+            {
+                "name": "genesis",
+                "address": "hx0000000000000000000000000000000000000000",
+                "balance": "0x2961fff8ca4a62327800000"
+            },
+            {
+                "name": "fee_treasury",
+                "address": "hx1000000000000000000000000000000000000000",
+                "balance": "0x0"
+            },
+            {
+                "name": "operator",
+                "address": "hxba2e54b54b695085f31ff1a9b33868b5aea44e33",
+                "balance": "0x579a814e10a740000000"
+            },
+            {
+                "name": "wallet1",
+                "address": "hx49a4aead36b9236c82e3c5ae34a236dae989d3b1",
+                "balance": "0x579a814e10a740000000"
+            },
+            {
+                "name": "wallet2",
+                "address": "hx8e88177581684a939d413b25a06c31738d6205b9",
+                "balance": "0x579a814e10a740000000"
+            },
+            {
+                "name": "wallet3",
+                "address": "hx24e8f0b5f744b90a78b47add2021a8e6c30b873c",
+                "balance": "0x579a814e10a740000000"
+            },
+            {
+                "name": "wallet4",
+                "address": "hx8fc813c86f0ea9eb532a9aa5bef6b1bfcced1ad7",
+                "balance": "0x579a814e10a740000000"
+            }
+        ]
+    },
+    "blockConfirmInterval": 2,
+    "blockConfirmEmpty": true
+}

@@ -1,0 +1,16 @@
+{
+    "uri": "http://127.0.0.1:9000/api/v3",
+    "nid": "0x3",
+    "password": "WARN1NG_DoNotUseThisWalletOnMainnet",
+    "keyStore": "./config/localhost/keystores/operator.icx",
+    "to": "cx0000000000000000000000000000000000000000",
+    "deploy": {
+        "stepLimit": "0x9a000000",
+        "mode": "install",
+        "scoreParams": {}
+    },
+    "txresult": {},
+    "transfer": {
+        "stepLimit": "0xf4240"
+    }
+}
