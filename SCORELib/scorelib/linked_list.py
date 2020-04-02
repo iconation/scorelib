@@ -15,8 +15,8 @@
 # limitations under the License.
 
 from iconservice import *
-from .IdFactory import *
-from .scorelib_consts import *
+from .id_factory import *
+from .consts import *
 
 
 class EmptyLinkedListException(Exception):

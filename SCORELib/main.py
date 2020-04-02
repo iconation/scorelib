@@ -16,9 +16,9 @@
 
 from iconservice import *
 from .checks import *
-from .BagDB import *
-from .SetDB import *
-from .LinkedListDB import *
+from .scorelib.bag import *
+from .scorelib.set import *
+from .scorelib.linked_list import *
 
 
 class SCORELib(IconScoreBase):

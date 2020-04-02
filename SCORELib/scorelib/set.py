@@ -15,7 +15,7 @@
 # limitations under the License.
 
 from iconservice import *
-from .BagDB import *
+from .bag import *
 
 
 class SetDBKeyError(Exception):

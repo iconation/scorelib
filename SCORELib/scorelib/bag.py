@@ -15,7 +15,7 @@
 # limitations under the License.
 
 from iconservice import *
-from .scorelib_consts import *
+from .consts import *
 
 
 class BagDB(object):

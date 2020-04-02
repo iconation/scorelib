@@ -15,9 +15,8 @@
 # limitations under the License.
 
 from iconservice import *
-from .utils import *
-from .SetDB import *
-from .scorelib_consts import *
+from .set import *
+from .consts import *
 
 
 class IterableDictDB(object):
