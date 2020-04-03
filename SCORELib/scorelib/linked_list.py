@@ -237,6 +237,50 @@ class LinkedListDB:
 
         return node_id
 
+    def append_after(self, value, after_id: int) -> int:
+        """ Append an element after an existing item of the linkedlist """
+        if after_id == self._tail_id.get():
+            return self.append(value)
+
+        cur_id, cur = self._create_node(value)
+        after = self._get_node(after_id)
+        afternext_id = after.get_next()
+        afternext = self._get_node(afternext_id)
+
+        # after>nid
+        after.set_next(cur_id)
+        # after>next>pid
+        afternext.set_prev(cur_id)
+        # cur>nid
+        cur.set_next(afternext_id)
+        # cur>pid
+        cur.set_prev(after_id)
+
+        self._length.set(self._length.get() + 1)
+        return cur_id
+
+    def prepend_before(self, value, before_id: int) -> int:
+        """ Append an element before an existing item of the linkedlist """
+        if before_id == self._head_id.get():
+            return self.prepend(value)
+
+        cur_id, cur = self._create_node(value)
+        before = self._get_node(before_id)
+        beforeprev_id = before.get_prev()
+        beforeprev = self._get_node(beforeprev_id)
+
+        # before>pid
+        before.set_prev(cur_id)
+        # before>prev>nid
+        beforeprev.set_next(cur_id)
+        # cur>nid
+        cur.set_next(before_id)
+        # cur>pid
+        cur.set_prev(beforeprev_id)
+
+        self._length.set(self._length.get() + 1)
+        return cur_id
+
     def move_node_after(self, cur_id: int, after_id: int) -> None:
         """ Move an existing node after another existing node """
         if cur_id == after_id:
