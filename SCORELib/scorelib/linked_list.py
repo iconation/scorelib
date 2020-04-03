@@ -443,7 +443,7 @@ class LinkedListDB:
                 next(items)
         except StopIteration:
             # Offset is bigger than the size of the bag
-            return []
+            raise StopIteration
 
         # Do a maximum iteration count of MAX_ITERATION_LOOP
         for _ in range(MAX_ITERATION_LOOP):
