@@ -77,7 +77,7 @@ class _NodeDB:
 class LinkedListDB:
     """ LinkedListDB is an iterable collection of items double linked by unique IDs.
         Order of retrieval is preserved.
-        Circular linked listing or duplicates nodes in the same linkedlist is *not allowed* 
+        Circular linked listing or duplicates nodes in the same linkedlist is *not allowed*
         in order to prevent infinite loops.
     """
 
@@ -158,7 +158,7 @@ class LinkedListDB:
         return self.node_value(self._tail_id.get())
 
     def next(self, cur_id: int) -> int:
-        """ Get the next node id from a given node 
+        """ Get the next node id from a given node
             Raises StopIteration if it doesn't exist """
         node = self._get_node(cur_id)
         next_id = node.get_next()
@@ -167,7 +167,7 @@ class LinkedListDB:
         return next_id
 
     def prev(self, cur_id: int) -> int:
-        """ Get the next node id from a given node 
+        """ Get the next node id from a given node
             Raises StopIteration if it doesn't exist """
         node = self._get_node(cur_id)
         prev_id = node.get_prev()
@@ -242,8 +242,8 @@ class LinkedListDB:
         if after_id == self._tail_id.get():
             return self.append(value)
 
-        cur_id, cur = self._create_node(value)
         after = self._get_node(after_id)
+        cur_id, cur = self._create_node(value)
         afternext_id = after.get_next()
         afternext = self._get_node(afternext_id)
 
@@ -264,8 +264,8 @@ class LinkedListDB:
         if before_id == self._head_id.get():
             return self.prepend(value)
 
-        cur_id, cur = self._create_node(value)
         before = self._get_node(before_id)
+        cur_id, cur = self._create_node(value)
         beforeprev_id = before.get_prev()
         beforeprev = self._get_node(beforeprev_id)
 
@@ -286,26 +286,41 @@ class LinkedListDB:
         if cur_id == after_id:
             raise LinkedNodeCannotMoveItself(self._name, cur_id)
 
-        if cur_id == self._tail_id.get():
-            return move_node_tail(cur_id)
+        if after_id == self._tail_id.get():
+            return self.move_node_tail(cur_id)
 
         cur = self._get_node(cur_id)
+
+        if after_id == cur.get_prev():
+            # noop
+            return
+
         after = self._get_node(after_id)
         afternext_id = after.get_next()
         afternext = self._get_node(afternext_id)
         curprev_id = cur.get_prev()
-        curprev = self._get_node(curprev_id)
+        if curprev_id:  # cur may be the head
+            curprev = self._get_node(curprev_id)
         curnext_id = cur.get_next()
-        curnext = self._get_node(curnext_id)
+        if curnext_id:  # cur may be the tail
+            curnext = self._get_node(curnext_id)
 
         # after>nid
         after.set_next(cur_id)
         # after>next>pid
         afternext.set_prev(cur_id)
         # curprev>nid
-        curprev.set_next(curnext_id)
+        if curprev_id:
+            curprev.set_next(curnext_id)
+        else:
+            # cur was head, set new head
+            self._head_id.set(curnext_id)
         # curnext>pid
-        curnext.set_prev(curprev_id)
+        if curnext_id:
+            curnext.set_prev(curprev_id)
+        else:
+            # cur was tail, set new tail
+            self._tail_id.set(curprev_id)
         # cur>nid
         cur.set_next(afternext_id)
         # cur>pid
@@ -316,26 +331,41 @@ class LinkedListDB:
         if cur_id == before_id:
             raise LinkedNodeCannotMoveItself(self._name, cur_id)
 
-        if cur_id == self._head_id.get():
-            return move_node_head(cur_id)
+        if before_id == self._head_id.get():
+            return self.move_node_head(cur_id)
 
         cur = self._get_node(cur_id)
+
+        if before_id == cur.get_next():
+            # noop
+            return
+
         before = self._get_node(before_id)
         beforeprev_id = before.get_prev()
         beforeprev = self._get_node(beforeprev_id)
         curprev_id = cur.get_prev()
-        curprev = self._get_node(curprev_id)
+        if curprev_id:  # cur may be the head
+            curprev = self._get_node(curprev_id)
         curnext_id = cur.get_next()
-        curnext = self._get_node(curnext_id)
+        if curnext_id:  # cur may be the tail
+            curnext = self._get_node(curnext_id)
 
         # before>pid
         before.set_prev(cur_id)
         # before>prev>nid
         beforeprev.set_next(cur_id)
         # curprev>nid
-        curprev.set_next(curnext_id)
+        if curprev_id:
+            curprev.set_next(curnext_id)
+        else:
+            # cur was head, set new head
+            self._head_id.set(curnext_id)
         # curnext>pid
-        curnext.set_prev(curprev_id)
+        if curnext_id:
+            curnext.set_prev(curprev_id)
+        else:
+            # cur was tail, set new tail
+            self._tail_id.set(curprev_id)
         # cur>nid
         cur.set_next(before_id)
         # cur>pid
@@ -443,7 +473,7 @@ class LinkedListDB:
                 next(items)
         except StopIteration:
             # Offset is bigger than the size of the bag
-            raise StopIteration
+            raise StopIteration(self._name)
 
         # Do a maximum iteration count of MAX_ITERATION_LOOP
         for _ in range(MAX_ITERATION_LOOP):

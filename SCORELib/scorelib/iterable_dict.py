@@ -74,7 +74,7 @@ class IterableDictDB(object):
                 next(keys)
         except StopIteration:
             # Offset is bigger than the size of the bag
-            raise StopIteration
+            raise StopIteration(self._name)
 
         # Do a maximum iteration count of MAX_ITERATION_LOOP
         for _ in range(MAX_ITERATION_LOOP):

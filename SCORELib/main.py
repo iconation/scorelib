@@ -133,6 +133,41 @@ class SCORELib(IconScoreBase):
         self.linkedlistdb().append(item)
 
     @catch_error
+    @external
+    def linkedlistdb_prepend(self, item: int) -> None:
+        self.linkedlistdb().append(item)
+
+    @catch_error
+    @external
+    def linkedlistdb_append_after(self, item: int, after_id: int) -> None:
+        self.linkedlistdb().append_after(item, after_id)
+
+    @catch_error
+    @external
+    def linkedlistdb_prepend_before(self, item: int, before_id: int) -> None:
+        self.linkedlistdb().prepend_before(item, before_id)
+
+    @catch_error
+    @external
+    def linkedlistdb_move_node_after(self, cur_id: int, after_id: int) -> None:
+        self.linkedlistdb().move_node_after(cur_id, after_id)
+
+    @catch_error
+    @external
+    def linkedlistdb_move_node_before(self, cur_id: int, before_id: int) -> None:
+        self.linkedlistdb().move_node_before(cur_id, before_id)
+
+    @catch_error
+    @external
+    def linkedlistdb_remove_head(self) -> None:
+        self.linkedlistdb().remove_head()
+
+    @catch_error
+    @external
+    def linkedlistdb_remove_tail(self) -> None:
+        self.linkedlistdb().remove_tail()
+
+    @catch_error
     @external(readonly=True)
     def linkedlistdb_length(self) -> int:
         return len(self.linkedlistdb())
@@ -156,3 +191,18 @@ class SCORELib(IconScoreBase):
     @external(readonly=True)
     def linkedlistdb_select(self, offset: int, match: int) -> list:
         return self.linkedlistdb().select(offset, self.linkedlistdb_sentinel, match=match)
+
+    @catch_error
+    @external(readonly=True)
+    def linkedlistdb_next(self, next_id: int) -> int:
+        return self.linkedlistdb().next(next_id)
+
+    @catch_error
+    @external(readonly=True)
+    def linkedlistdb_prev(self, prev_id: int) -> int:
+        return self.linkedlistdb().prev(prev_id)
+
+    @catch_error
+    @external(readonly=True)
+    def linkedlistdb_selectall(self, offset: int) -> list:
+        return self.linkedlistdb().select(offset)
