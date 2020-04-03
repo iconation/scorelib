@@ -18,11 +18,6 @@ from iconservice import *
 from .bag import *
 
 
-class SetDBKeyError(Exception):
-    """ Invalid entry in the SetDB """
-    pass
-
-
 class SetDB(BagDB):
     """
     SetDB is an iterable collection of *unique* items.
@@ -45,15 +40,15 @@ class SetDB(BagDB):
 
     def remove(self, item) -> None:
         """ This operation removes element x from the set.
-            If element x does not exist, it raises a SetDBKeyError.
+            If element x does not exist, it raises a ItemNotFound.
         """
         if item not in self._items:
-            raise SetDBKeyError(self._name, item)
+            raise ItemNotFound(self._name, item)
         super().remove(item)
 
     def discard(self, item) -> None:
         """ This operation also removes element x from the set.
-            If element x does not exist, it *does not raise* a SetDBKeyError.
+            If element x does not exist, it *does not raise* a ItemNotFound.
         """
         if item in self._items:
             super().remove(item)

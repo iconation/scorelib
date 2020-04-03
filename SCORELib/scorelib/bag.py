@@ -18,6 +18,11 @@ from iconservice import *
 from .consts import *
 
 
+class ItemNotFound(Exception):
+    """ Cannot find an entry in the collection """
+    pass
+
+
 class BagDB(object):
     """
     BagDB is an iterable collection of items that may have duplicates.
@@ -41,6 +46,10 @@ class BagDB(object):
 
     def __contains__(self, item) -> bool:
         return item in self._items
+
+    def check_exists(self, item) -> None:
+        if not item in self:
+            raise ItemNotFound(self._name, str(item))
 
     def count(self, item) -> int:
         """ Returns the number of occurences of a given item in the bag """
