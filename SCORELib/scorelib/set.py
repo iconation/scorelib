@@ -27,7 +27,7 @@ class SetDB(BagDB):
     _NAME = '_SETDB'
 
     def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type, order=False):
-        name = var_key + self._NAME
+        name = var_key + SetDB._NAME
         super().__init__(name, db, value_type, order)
         self._name = name
         self._db = db

@@ -38,7 +38,7 @@ class _NodeDB:
     _NAME = '_NODEDB'
 
     def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type):
-        self._name = var_key + self._NAME
+        self._name = var_key + _NodeDB._NAME
         self._init = VarDB(f'{self._name}_init', db, int)
         self._value = VarDB(f'{self._name}_value', db, value_type)
         self._next = VarDB(f'{self._name}_next', db, int)
@@ -84,7 +84,7 @@ class LinkedListDB:
     _NAME = '_LINKED_LISTDB'
 
     def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type):
-        self._name = var_key + self._NAME
+        self._name = var_key + LinkedListDB._NAME
         self._head_id = VarDB(f'{self._name}_head_id', db, int)
         self._tail_id = VarDB(f'{self._name}_tail_id', db, int)
         self._length = VarDB(f'{self._name}_length', db, int)

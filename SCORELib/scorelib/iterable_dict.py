@@ -29,7 +29,7 @@ class IterableDictDB(object):
     _NAME = '_ITERABLE_DICTDB'
 
     def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type, order=False):
-        self._name = var_key + self._NAME
+        self._name = var_key + IterableDictDB._NAME
         self._keys = SetDB(f'{self._name}_keys', db, value_type, order)
         self._values = DictDB(f'{self._name}_values', db, value_type)
         self._db = db
