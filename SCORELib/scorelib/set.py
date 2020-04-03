@@ -27,8 +27,9 @@ class SetDB(BagDB):
     _NAME = '_SETDB'
 
     def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type, order=False):
-        super().__init__(var_key + self._NAME, db, value_type, order)
-        self._name = var_key + self._NAME
+        name = var_key + self._NAME
+        super().__init__(name, db, value_type, order)
+        self._name = name
         self._db = db
 
     def add(self, item) -> None:
@@ -43,7 +44,7 @@ class SetDB(BagDB):
             If element x does not exist, it raises a ItemNotFound.
         """
         if item not in self._items:
-            raise ItemNotFound(self._name, item)
+            raise ItemNotFound(self._name, str(item))
         super().remove(item)
 
     def discard(self, item) -> None:

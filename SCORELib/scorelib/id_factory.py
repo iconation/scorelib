@@ -24,7 +24,7 @@ class IdFactory:
 
     def __init__(self, var_key: str, db: IconScoreDatabase):
         self._name = var_key + self._NAME
-        self._uid = VarDB(self._name + '_uid', db, int)
+        self._uid = VarDB(f'{self._name}_uid', db, int)
         self._db = db
 
     def get_uid(self) -> int:

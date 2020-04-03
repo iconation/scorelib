@@ -39,10 +39,10 @@ class _NodeDB:
 
     def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type):
         self._name = var_key + self._NAME
-        self._init = VarDB(self._name + '_init', db, int)
-        self._value = VarDB(self._name + '_value', db, value_type)
-        self._next = VarDB(self._name + '_next', db, int)
-        self._prev = VarDB(self._name + '_prev', db, int)
+        self._init = VarDB(f'{self._name}_init', db, int)
+        self._value = VarDB(f'{self._name}_value', db, value_type)
+        self._next = VarDB(f'{self._name}_next', db, int)
+        self._prev = VarDB(f'{self._name}_prev', db, int)
         self._db = db
 
     def __delete__(self) -> None:
@@ -85,9 +85,9 @@ class LinkedListDB:
 
     def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type):
         self._name = var_key + self._NAME
-        self._head_id = VarDB(self._name + '_head_id', db, int)
-        self._tail_id = VarDB(self._name + '_tail_id', db, int)
-        self._length = VarDB(self._name + '_length', db, int)
+        self._head_id = VarDB(f'{self._name}_head_id', db, int)
+        self._tail_id = VarDB(f'{self._name}_tail_id', db, int)
+        self._length = VarDB(f'{self._name}_length', db, int)
         self._value_type = value_type
         self._db = db
 

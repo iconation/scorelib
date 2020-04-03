@@ -33,7 +33,7 @@ class BagDB(object):
 
     def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type, order=False):
         self._name = var_key + self._NAME
-        self._items = ArrayDB(self._name + '_items', db, value_type=value_type)
+        self._items = ArrayDB(f'{self._name}_items', db, value_type=value_type)
         self._order = order
         self._db = db
 
