@@ -27,6 +27,10 @@ class LinkedNodeNotFound(Exception):
     pass
 
 
+class LinkedNodeAlreadyExists(Exception):
+    pass
+
+
 class LinkedNodeCannotMoveItself(Exception):
     pass
 
@@ -121,9 +125,16 @@ class LinkedListDB:
     def _node(self, node_id) -> _NodeDB:
         return _NodeDB(str(node_id) + self._name, self._db, self._value_type)
 
-    def _create_node(self, value) -> _NodeDB:
-        node_id = IdFactory(self._name + '_nodedb', self._db).get_uid()
+    def _create_node(self, value, node_id=None) -> _NodeDB:
+        if node_id is None:
+            node_id = IdFactory(self._name + '_nodedb', self._db).get_uid()
+
         node = self._node(node_id)
+
+        # Check if node already exists
+        if node.exists():
+            raise LinkedNodeAlreadyExists(self._name, node_id)
+
         node.set_value(value)
         return (node_id, node)
 
@@ -197,53 +208,54 @@ class LinkedListDB:
         self._head_id.remove()
         self._length.set(0)
 
-    def append(self, value) -> int:
+    def append(self, value, node_id=None) -> int:
         """ Append an element at the end of the linkedlist """
-        node_id, node = self._create_node(value)
+        cur_id, cur = self._create_node(value, node_id)
 
         if self._length.get() == 0:
             # Empty LinkedList
-            self._head_id.set(node_id)
-            self._tail_id.set(node_id)
+            self._head_id.set(cur_id)
+            self._tail_id.set(cur_id)
         else:
             # Append to tail
             tail = self._get_tail_node()
-            tail.set_next(node_id)
-            node.set_prev(self._tail_id.get())
+            tail.set_next(cur_id)
+            cur.set_prev(self._tail_id.get())
             # Update tail to cur node
-            self._tail_id.set(node_id)
+            self._tail_id.set(cur_id)
 
         self._length.set(self._length.get() + 1)
 
-        return node_id
+        return cur_id
 
-    def prepend(self, value) -> int:
+    def prepend(self, value, node_id=None) -> int:
         """ Prepend an element at the beginning of the linkedlist """
-        node_id, node = self._create_node(value)
+        cur_id, cur = self._create_node(value, node_id)
 
         if self._length.get() == 0:
             # Empty LinkedList
-            self._head_id.set(node_id)
-            self._tail_id.set(node_id)
+            self._head_id.set(cur_id)
+            self._tail_id.set(cur_id)
         else:
             # Prepend to head
             head = self._get_head_node()
-            head.set_prev(node_id)
-            node.set_next(self._head_id.get())
+            head.set_prev(cur_id)
+            cur.set_next(self._head_id.get())
             # Update head to cur node
-            self._head_id.set(node_id)
+            self._head_id.set(cur_id)
 
         self._length.set(self._length.get() + 1)
 
-        return node_id
+        return cur_id
 
-    def append_after(self, value, after_id: int) -> int:
+    def append_after(self, value, after_id: int, node_id=None) -> int:
         """ Append an element after an existing item of the linkedlist """
         if after_id == self._tail_id.get():
-            return self.append(value)
+            return self.append(value, node_id)
 
         after = self._get_node(after_id)
-        cur_id, cur = self._create_node(value)
+        cur_id, cur = self._create_node(value, node_id)
+
         afternext_id = after.get_next()
         afternext = self._get_node(afternext_id)
 
@@ -259,13 +271,14 @@ class LinkedListDB:
         self._length.set(self._length.get() + 1)
         return cur_id
 
-    def prepend_before(self, value, before_id: int) -> int:
+    def prepend_before(self, value, before_id: int, node_id=None) -> int:
         """ Append an element before an existing item of the linkedlist """
         if before_id == self._head_id.get():
-            return self.prepend(value)
+            return self.prepend(value, node_id)
 
         before = self._get_node(before_id)
-        cur_id, cur = self._create_node(value)
+        cur_id, cur = self._create_node(value, node_id)
+
         beforeprev_id = before.get_prev()
         beforeprev = self._get_node(beforeprev_id)
 
