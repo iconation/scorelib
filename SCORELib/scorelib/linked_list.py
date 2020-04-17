@@ -125,7 +125,7 @@ class LinkedListDB:
     def _node(self, node_id) -> _NodeDB:
         return _NodeDB(str(node_id) + self._name, self._db, self._value_type)
 
-    def _create_node(self, value, node_id=None) -> _NodeDB:
+    def _create_node(self, value, node_id: int = None) -> _NodeDB:
         if node_id is None:
             node_id = IdFactory(self._name + '_nodedb', self._db).get_uid()
 
@@ -208,7 +208,7 @@ class LinkedListDB:
         self._head_id.remove()
         self._length.set(0)
 
-    def append(self, value, node_id=None) -> int:
+    def append(self, value, node_id: int = None) -> int:
         """ Append an element at the end of the linkedlist """
         cur_id, cur = self._create_node(value, node_id)
 
@@ -228,7 +228,7 @@ class LinkedListDB:
 
         return cur_id
 
-    def prepend(self, value, node_id=None) -> int:
+    def prepend(self, value, node_id: int = None) -> int:
         """ Prepend an element at the beginning of the linkedlist """
         cur_id, cur = self._create_node(value, node_id)
 
@@ -248,7 +248,7 @@ class LinkedListDB:
 
         return cur_id
 
-    def append_after(self, value, after_id: int, node_id=None) -> int:
+    def append_after(self, value, after_id: int, node_id: int = None) -> int:
         """ Append an element after an existing item of the linkedlist """
         if after_id == self._tail_id.get():
             return self.append(value, node_id)
@@ -271,7 +271,7 @@ class LinkedListDB:
         self._length.set(self._length.get() + 1)
         return cur_id
 
-    def prepend_before(self, value, before_id: int, node_id=None) -> int:
+    def prepend_before(self, value, before_id: int, node_id: int = None) -> int:
         """ Append an element before an existing item of the linkedlist """
         if before_id == self._head_id.get():
             return self.prepend(value, node_id)
@@ -502,3 +502,35 @@ class LinkedListDB:
                 break
 
         return result
+
+
+class UIDLinkedListDB(LinkedListDB):
+    """
+        UIDLinkedListDB is a linked list of unique IDs.
+        The linkedlist node ID is equal to the value of the UID provided,
+        so the developer needs to make sure the UID provided is globally unique to the application.
+        Consequently, the concept of node ID is merged with the UID provided
+        from a developper point of view, which simplifies the usage of the linkedlist.
+    """
+    _NAME = 'UID_LINKED_LIST_DB'
+
+    def __init__(self, address: Address, db: IconScoreDatabase):
+        name = f'{str(address)}_{UIDLinkedListDB._NAME}'
+        super().__init__(name, db, int)
+        self._name = name
+
+    def append(self, uid: int, _: int = None) -> None:
+        super().append(uid, uid)
+
+    def prepend(self, uid: int, _: int = None) -> None:
+        super().prepend(uid, uid)
+
+    def append_after(self, value: int, after_id: int, _: int = None) -> None:
+        super().append_after(value, after_id, value)
+
+    def prepend_before(self, value: int, before_id: int, _: int = None) -> None:
+        super().prepend_before(value, before_id, value)
+
+    def __iter__(self):
+        for node_id, uid in super().__iter__():
+            yield uid
