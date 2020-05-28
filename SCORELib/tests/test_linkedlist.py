@@ -227,9 +227,8 @@ class Test(IconIntegrateTestBase):
             icon_service=self.icon_service
         )
 
-        print("============================")
-        print(linkedlistdb)
-        print("============================")
+        # print(linkedlistdb)
+
         self.assertTrue(len(linkedlistdb) == 4)
         self.assertTrue(linkedlistdb[0][1] == 1)
         self.assertTrue(linkedlistdb[1][1] == 4)
@@ -381,9 +380,8 @@ class Test(IconIntegrateTestBase):
             icon_service=self.icon_service
         )
 
-        print("============================")
-        print(linkedlistdb)
-        print("============================")
+        # print(linkedlistdb)
+
         self.assertTrue(len(linkedlistdb) == 4)
         self.assertTrue(linkedlistdb[0][1] == 1)
         self.assertTrue(linkedlistdb[1][1] == 2)
@@ -440,9 +438,8 @@ class Test(IconIntegrateTestBase):
             icon_service=self.icon_service
         )
 
-        print("============================")
-        print(linkedlistdb)
-        print("============================")
+        # print(linkedlistdb)
+
         self.assertTrue(len(linkedlistdb) == 4)
         self.assertTrue(linkedlistdb[0][1] == 1)
         self.assertTrue(linkedlistdb[1][1] == 3)
@@ -555,9 +552,8 @@ class Test(IconIntegrateTestBase):
             icon_service=self.icon_service
         )
 
-        print("============================")
-        print(linkedlistdb)
-        print("============================")
+        # print(linkedlistdb)
+
         self.assertTrue(len(linkedlistdb) == 4)
         self.assertTrue(linkedlistdb[0][1] == 1)
         self.assertTrue(linkedlistdb[1][1] == 2)
@@ -614,9 +610,8 @@ class Test(IconIntegrateTestBase):
             icon_service=self.icon_service
         )
 
-        print("============================")
-        print(linkedlistdb)
-        print("============================")
+        # print(linkedlistdb)
+
         self.assertTrue(len(linkedlistdb) == 4)
         self.assertTrue(linkedlistdb[0][1] == 2)
         self.assertTrue(linkedlistdb[1][1] == 1)
@@ -673,9 +668,8 @@ class Test(IconIntegrateTestBase):
             icon_service=self.icon_service
         )
 
-        print("============================")
-        print(linkedlistdb)
-        print("============================")
+        # print(linkedlistdb)
+
         self.assertTrue(len(linkedlistdb) == 4)
         self.assertTrue(linkedlistdb[0][1] == 2)
         self.assertTrue(linkedlistdb[1][1] == 1)
@@ -732,9 +726,8 @@ class Test(IconIntegrateTestBase):
             icon_service=self.icon_service
         )
 
-        print("============================")
-        print(linkedlistdb)
-        print("============================")
+        # print(linkedlistdb)
+
         self.assertTrue(len(linkedlistdb) == 4)
         self.assertTrue(linkedlistdb[0][1] == 1)
         self.assertTrue(linkedlistdb[1][1] == 2)
@@ -900,9 +893,8 @@ class Test(IconIntegrateTestBase):
             icon_service=self.icon_service
         )
 
-        print("============================")
-        print(linkedlistdb)
-        print("============================")
+        # print(linkedlistdb)
+
         self.assertTrue(len(linkedlistdb) == 4)
         self.assertTrue(linkedlistdb[0][1] == 4)
         self.assertTrue(linkedlistdb[1][1] == 1)
@@ -953,9 +945,8 @@ class Test(IconIntegrateTestBase):
             icon_service=self.icon_service
         )
 
-        print("============================")
-        print(linkedlistdb)
-        print("============================")
+        # print(linkedlistdb)
+
         self.assertTrue(len(linkedlistdb) == 4)
         self.assertTrue(linkedlistdb[0][1] == 1)
         self.assertTrue(linkedlistdb[1][1] == 2)
@@ -1006,9 +997,8 @@ class Test(IconIntegrateTestBase):
             icon_service=self.icon_service
         )
 
-        print("============================")
-        print(linkedlistdb)
-        print("============================")
+        # print(linkedlistdb)
+
         self.assertTrue(len(linkedlistdb) == 4)
         self.assertTrue(linkedlistdb[0][1] == 1)
         self.assertTrue(linkedlistdb[1][1] == 2)
@@ -1214,9 +1204,8 @@ class Test(IconIntegrateTestBase):
             icon_service=self.icon_service
         )
 
-        print("============================")
-        print(linkedlistdb)
-        print("============================")
+        # print(linkedlistdb)
+
         self.assertTrue(len(linkedlistdb) == 3)
         self.assertTrue(linkedlistdb[0][1] == 2)
         self.assertTrue(linkedlistdb[1][1] == 3)
@@ -1271,9 +1260,8 @@ class Test(IconIntegrateTestBase):
             icon_service=self.icon_service
         )
 
-        print("============================")
-        print(linkedlistdb)
-        print("============================")
+        # print(linkedlistdb)
+
         self.assertTrue(len(linkedlistdb) == 3)
         self.assertTrue(linkedlistdb[0][1] == 1)
         self.assertTrue(linkedlistdb[1][1] == 2)

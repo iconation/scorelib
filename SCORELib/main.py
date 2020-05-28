@@ -19,6 +19,8 @@ from .checks import *
 from .scorelib.bag import *
 from .scorelib.set import *
 from .scorelib.linked_list import *
+from .scorelib.id_factory import *
+from .scorelib.iterable_dict import *
 
 
 class SCORELib(IconScoreBase):
@@ -49,6 +51,14 @@ class SCORELib(IconScoreBase):
     @catch_error
     def linkedlistdb(self) -> LinkedListDB:
         return LinkedListDB('LLDB', self.db, int)
+
+    @catch_error
+    def idfactory(self) -> IdFactory:
+        return IdFactory('IDFACTORY', self.db)
+
+    @catch_error
+    def iterabledict(self) -> IterableDictDB:
+        return IterableDictDB('ITERABLEDICT', self.db, str)
 
     # ================================================
     #  BAGDB External methods
@@ -206,3 +216,75 @@ class SCORELib(IconScoreBase):
     @external(readonly=True)
     def linkedlistdb_selectall(self, offset: int) -> list:
         return self.linkedlistdb().select(offset)
+
+    # ================================================
+    #  IdFactory External methods
+    # ================================================
+    @catch_error
+    @external
+    def idfactory_gen_uid(self) -> int:
+        return self.idfactory().get_uid()
+
+    @catch_error
+    @external(readonly=True)
+    def idfactory_get_uid(self) -> int:
+        return self.idfactory()._uid.get()
+
+    # ================================================
+    #  IterableDict External methods
+    # ================================================
+    @catch_error
+    @external(readonly=True)
+    def iterabledict_keys(self) -> list:
+        return self.iterabledict().keys()
+
+    @catch_error
+    @external(readonly=True)
+    def iterabledict_values(self) -> list:
+        return self.iterabledict().values()
+
+    @catch_error
+    @external(readonly=True)
+    def iterabledict_iter(self) -> list:
+        for key, value in self.iterabledict():
+            yield key, value
+
+    @catch_error
+    @external(readonly=True)
+    def iterabledict_contains(self, item: str) -> bool:
+        return item in self.iterabledict()
+
+    @catch_error
+    @external(readonly=True)
+    def iterabledict_length(self) -> int:
+        return len(self.iterabledict())
+
+    @catch_error
+    @external
+    def iterabledict_setitem(self, key: str, value: str) -> None:
+        self.iterabledict()[key] = value
+
+    @catch_error
+    @external(readonly=True)
+    def iterabledict_getitem(self, key: str) -> str:
+        return self.iterabledict()[key]
+
+    @catch_error
+    @external
+    def iterabledict_delitem(self, key: str) -> None:
+        del self.iterabledict()[key]
+
+    @staticmethod
+    def iterabledict_sentinel(db, item, **kwargs) -> bool:
+        key, value = item
+        return key == kwargs['match']
+
+    @catch_error
+    @external(readonly=True)
+    def iterabledict_select(self, offset: int, match: str) -> list:
+        return self.iterabledict().select(offset, self.iterabledict_sentinel, match=match)
+
+    @catch_error
+    @external
+    def iterabledict_clear(self) -> None:
+        self.iterabledict().clear()

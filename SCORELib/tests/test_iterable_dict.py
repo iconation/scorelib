@@ -78,201 +78,229 @@ class Test(IconIntegrateTestBase):
         return result
 
     # ===============================================================
-    def test_add_1(self):
+    def test_length(self):
+        length = icx_call(
+            super(),
+            from_=self._operator.get_address(),
+            to_=self._score_address,
+            method='iterabledict_length',
+            icon_service=self.icon_service
+        )
+        self.assertTrue(int(length, 16) == 0)
+
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='setdb_add',
-            params={'item': 1},
+            method='iterabledict_setitem',
+            params={'key': 'mykey', 'value': 'myvalue'},
             icon_service=self.icon_service
         )
         length = icx_call(
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='setdb_length',
+            method='iterabledict_length',
             icon_service=self.icon_service
         )
         self.assertTrue(int(length, 16) == 1)
 
-    def test_add_2(self):
+    def test_setitem_2(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='setdb_add',
-            params={'item': 1},
+            method='iterabledict_setitem',
+            params={'key': 'mykey', 'value': 'myvalue'},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='setdb_add',
-            params={'item': 1},
+            method='iterabledict_setitem',
+            params={'key': 'mykey', 'value': 'myvalue'},
             icon_service=self.icon_service
         )
         length = icx_call(
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='setdb_length',
+            method='iterabledict_length',
             icon_service=self.icon_service
         )
         self.assertTrue(int(length, 16) == 1)
+
+        result = transaction_call_success(
+            super(),
+            from_=self._operator,
+            to_=self._score_address,
+            method='iterabledict_setitem',
+            params={'key': 'mykey2', 'value': 'myvalue'},
+            icon_service=self.icon_service
+        )
+        length = icx_call(
+            super(),
+            from_=self._operator.get_address(),
+            to_=self._score_address,
+            method='iterabledict_length',
+            icon_service=self.icon_service
+        )
+        self.assertTrue(int(length, 16) == 2)
+
+    def test_setitem_3(self):
+        result = transaction_call_success(
+            super(),
+            from_=self._operator,
+            to_=self._score_address,
+            method='iterabledict_setitem',
+            params={'key': 'mykey', 'value': 'myvalue'},
+            icon_service=self.icon_service
+        )
+        result = transaction_call_success(
+            super(),
+            from_=self._operator,
+            to_=self._score_address,
+            method='iterabledict_setitem',
+            params={'key': 'mykey2', 'value': 'myvalue'},
+            icon_service=self.icon_service
+        )
+        result = transaction_call_success(
+            super(),
+            from_=self._operator,
+            to_=self._score_address,
+            method='iterabledict_setitem',
+            params={'key': 'mykey3', 'value': 'myvalue'},
+            icon_service=self.icon_service
+        )
+        length = icx_call(
+            super(),
+            from_=self._operator.get_address(),
+            to_=self._score_address,
+            method='iterabledict_length',
+            icon_service=self.icon_service
+        )
+        self.assertTrue(int(length, 16) == 3)
+
+    def test_clear(self):
+        result = transaction_call_success(
+            super(),
+            from_=self._operator,
+            to_=self._score_address,
+            method='iterabledict_setitem',
+            params={'key': 'mykey1', 'value': 'myvalue'},
+            icon_service=self.icon_service
+        )
+        result = transaction_call_success(
+            super(),
+            from_=self._operator,
+            to_=self._score_address,
+            method='iterabledict_setitem',
+            params={'key': 'mykey2', 'value': 'myvalue'},
+            icon_service=self.icon_service
+        )
+        result = transaction_call_success(
+            super(),
+            from_=self._operator,
+            to_=self._score_address,
+            method='iterabledict_setitem',
+            params={'key': 'mykey3', 'value': 'myvalue'},
+            icon_service=self.icon_service
+        )
+        result = transaction_call_success(
+            super(),
+            from_=self._operator,
+            to_=self._score_address,
+            method='iterabledict_clear',
+            icon_service=self.icon_service
+        )
+        length = icx_call(
+            super(),
+            from_=self._operator.get_address(),
+            to_=self._score_address,
+            method='iterabledict_length',
+            icon_service=self.icon_service
+        )
+        self.assertTrue(int(length, 16) == 0)
 
     def test_remove_1(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='setdb_add',
-            params={'item': 1},
+            method='iterabledict_setitem',
+            params={'key': 'mykey1', 'value': 'myvalue'},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='setdb_remove',
-            params={'item': 1},
+            method='iterabledict_delitem',
+            params={'key': 'mykey1'},
             icon_service=self.icon_service
         )
-        length = icx_call(
+        count = icx_call(
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='setdb_length',
+            method='iterabledict_length',
             icon_service=self.icon_service
         )
-        self.assertTrue(int(length, 16) == 0)
+        self.assertTrue(int(count, 16) == 0)
 
     def test_remove_2(self):
-        wrong_item = 2
-
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='setdb_add',
-            params={'item': 1},
+            method='iterabledict_setitem',
+            params={'key': 'mykey1', 'value': 'myvalue'},
+            icon_service=self.icon_service
+        )
+        result = transaction_call_success(
+            super(),
+            from_=self._operator,
+            to_=self._score_address,
+            method='iterabledict_delitem',
+            params={'key': 'mykey1'},
             icon_service=self.icon_service
         )
         result = transaction_call_error(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='setdb_remove',
-            params={'item': wrong_item},
+            method='iterabledict_delitem',
+            params={'key': 'mykey1'},
             icon_service=self.icon_service
         )
-        self.assertEqual(result['failure']['message'], f"ItemNotFound('SET_SETDB', '{wrong_item}')")
-
-    def test_discard_1(self):
-        result = transaction_call_success(
-            super(),
-            from_=self._operator,
-            to_=self._score_address,
-            method='setdb_add',
-            params={'item': 1},
-            icon_service=self.icon_service
-        )
-        result = transaction_call_success(
-            super(),
-            from_=self._operator,
-            to_=self._score_address,
-            method='setdb_discard',
-            params={'item': 1},
-            icon_service=self.icon_service
-        )
-        length = icx_call(
-            super(),
-            from_=self._operator.get_address(),
-            to_=self._score_address,
-            method='setdb_length',
-            icon_service=self.icon_service
-        )
-        self.assertTrue(int(length, 16) == 0)
-
-    def test_discard_2(self):
-        wrong_item = 2
-
-        result = transaction_call_success(
-            super(),
-            from_=self._operator,
-            to_=self._score_address,
-            method='setdb_add',
-            params={'item': 1},
-            icon_service=self.icon_service
-        )
-        result = transaction_call_success(
-            super(),
-            from_=self._operator,
-            to_=self._score_address,
-            method='setdb_discard',
-            params={'item': wrong_item},
-            icon_service=self.icon_service
-        )
-        length = icx_call(
-            super(),
-            from_=self._operator.get_address(),
-            to_=self._score_address,
-            method='setdb_length',
-            icon_service=self.icon_service
-        )
-        self.assertTrue(int(length, 16) == 1)
-
-    def test_pop(self):
-        result = transaction_call_success(
-            super(),
-            from_=self._operator,
-            to_=self._score_address,
-            method='setdb_add',
-            params={'item': 1},
-            icon_service=self.icon_service
-        )
-        result = transaction_call_success(
-            super(),
-            from_=self._operator,
-            to_=self._score_address,
-            method='setdb_pop',
-            icon_service=self.icon_service
-        )
-        length = icx_call(
-            super(),
-            from_=self._operator.get_address(),
-            to_=self._score_address,
-            method='setdb_length',
-            icon_service=self.icon_service
-        )
-        self.assertTrue(int(length, 16) == 0)
+        self.assertEqual(result['failure']['message'], f"ItemNotFound('ITERABLEDICT_ITERABLE_DICTDB_keys_SETDB', 'mykey1')")
 
     def test_select_1(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='setdb_add',
-            params={'item': 1},
+            method='iterabledict_setitem',
+            params={'key': 'mykey1', 'value': 'myvalue'},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='setdb_add',
-            params={'item': 2},
+            method='iterabledict_setitem',
+            params={'key': 'mykey2', 'value': 'myvalue'},
             icon_service=self.icon_service
         )
 
-        setdb = icx_call(
+        iterabledict = icx_call(
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='setdb_select',
-            params={'offset': 0, 'match': 1},
+            method='iterabledict_select',
+            params={'offset': 0, 'match': 'mykey1'},
             icon_service=self.icon_service
         )
 
-        self.assertTrue(len(setdb) == 1)
+        self.assertTrue(len(iterabledict) == 1)

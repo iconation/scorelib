@@ -91,3 +91,11 @@ class IterableDictDB(object):
                 break
 
         return {k: v for k, v in result}
+
+    def clear(self):
+        """ Remove all key,value pairs in the dict """
+        # Removes values
+        for key in self.keys():
+            del self._values[key]
+        # Remove keys
+        self._keys.clear()
