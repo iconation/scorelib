@@ -21,6 +21,7 @@ from .scorelib.set import *
 from .scorelib.linked_list import *
 from .scorelib.id_factory import *
 from .scorelib.iterable_dict import *
+from .scorelib.binary_tree import *
 
 
 class SCORELib(IconScoreBase):
@@ -60,6 +61,10 @@ class SCORELib(IconScoreBase):
     def iterabledict(self) -> IterableDictDB:
         return IterableDictDB('ITERABLEDICT', self.db, str)
 
+    @catch_error
+    def binarytree(self) -> BinaryTreeDB:
+        return BinaryTreeDB('BINARY_TREE', self.db, str)
+
     # ================================================
     #  BAGDB External methods
     # ================================================
@@ -89,7 +94,7 @@ class SCORELib(IconScoreBase):
         self.bagdb().remove(item)
 
     @staticmethod
-    def bagdb_sentinel(db, item, **kwargs) -> bool:
+    def bagdb_sentinel(db: IconScoreDatabase, item, **kwargs) -> bool:
         return item == kwargs['match']
 
     @catch_error
@@ -126,7 +131,7 @@ class SCORELib(IconScoreBase):
         self.setdb().pop()
 
     @staticmethod
-    def setdb_sentinel(db, item, **kwargs) -> bool:
+    def setdb_sentinel(db: IconScoreDatabase, item, **kwargs) -> bool:
         return item == kwargs['match']
 
     @catch_error
@@ -193,7 +198,7 @@ class SCORELib(IconScoreBase):
         self.linkedlistdb().clear()
 
     @staticmethod
-    def linkedlistdb_sentinel(db, item, **kwargs) -> bool:
+    def linkedlistdb_sentinel(db: IconScoreDatabase, item, **kwargs) -> bool:
         node_id, value = item
         return value == kwargs['match']
 
@@ -275,7 +280,7 @@ class SCORELib(IconScoreBase):
         del self.iterabledict()[key]
 
     @staticmethod
-    def iterabledict_sentinel(db, item, **kwargs) -> bool:
+    def iterabledict_sentinel(db: IconScoreDatabase, item, **kwargs) -> bool:
         key, value = item
         return key == kwargs['match']
 
@@ -288,3 +293,46 @@ class SCORELib(IconScoreBase):
     @external
     def iterabledict_clear(self) -> None:
         self.iterabledict().clear()
+
+    # ================================================
+    #  BinaryTreeDB External methods
+    # ================================================
+    @catch_error
+    @external
+    def binarytree_create_node(self, value: str) -> None:
+        self.binarytree().create_node(value)
+
+    @catch_error
+    @external
+    def binarytree_set_left_child(self, parent_id: int, left_id: int) -> None:
+        self.binarytree().set_left_child(parent_id, left_id)
+
+    @catch_error
+    @external
+    def binarytree_set_right_child(self, parent_id: int, right_id: int) -> None:
+        self.binarytree().set_right_child(parent_id, right_id)
+
+    @staticmethod
+    def binarytree_callback(db: IconScoreDatabase, item, **kwargs) -> None:
+        kwargs['result'].append(item)
+
+    @catch_error
+    @external(readonly=True)
+    def binarytree_traverse_post_order(self, root: int) -> list:
+        result = []
+        self.binarytree().traverse_post_order(root, self.binarytree_callback, result=result)
+        return result
+
+    @catch_error
+    @external(readonly=True)
+    def binarytree_traverse_in_order(self, root: int) -> list:
+        result = []
+        self.binarytree().traverse_in_order(root, self.binarytree_callback, result=result)
+        return result
+
+    @catch_error
+    @external(readonly=True)
+    def binarytree_traverse_pre_order(self, root: int) -> list:
+        result = []
+        self.binarytree().traverse_pre_order(root, self.binarytree_callback, result=result)
+        return result
