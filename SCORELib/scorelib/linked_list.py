@@ -49,7 +49,7 @@ class _NodeDB:
         self._prev = VarDB(f'{self._name}_prev', db, int)
         self._db = db
 
-    def __delete__(self) -> None:
+    def delete(self) -> None:
         self._value.remove()
         self._prev.remove()
         self._next.remove()
@@ -95,7 +95,7 @@ class LinkedListDB:
         self._value_type = value_type
         self._db = db
 
-    def __delete__(self) -> None:
+    def delete(self) -> None:
         self.clear()
         self._head_id.remove()
         self._tail_id.remove()
@@ -190,7 +190,7 @@ class LinkedListDB:
         """ Delete all nodes from the linkedlist """
         cur_id = self._head_id.get()
         if not cur_id:
-            # Empty
+            # Empty list
             return
 
         node = self._get_node(cur_id)
@@ -200,9 +200,12 @@ class LinkedListDB:
         while cur_id != tail_id:
             cur_id = node.get_next()
             # We're done with this node
-            del node
+            node.delete()
             # Iterate to the next node
             node = self._get_node(cur_id)
+
+        # Delete the last node
+        node.delete()
 
         self._tail_id.remove()
         self._head_id.remove()
@@ -441,7 +444,7 @@ class LinkedListDB:
             new_head = old_head.get_next()
             self._head_id.set(new_head)
             self._get_node(new_head).set_prev(0)
-            del old_head
+            old_head.delete()
             self._length.set(self._length.get() - 1)
 
     def remove_tail(self) -> None:
@@ -453,7 +456,7 @@ class LinkedListDB:
             new_tail = old_tail.get_prev()
             self._tail_id.set(new_tail)
             self._get_node(new_tail).set_next(0)
-            del old_tail
+            old_tail.delete()
             self._length.set(self._length.get() - 1)
 
     def remove(self, cur_id: int) -> None:
@@ -472,7 +475,7 @@ class LinkedListDB:
             curprev = self._get_node(curprev_id)
             curnext.set_prev(curprev_id)
             curprev.set_next(curnext_id)
-            del cur
+            cur.delete()
             self._length.set(self._length.get() - 1)
 
     def select(self, offset: int, cond=None, **kwargs) -> list:
