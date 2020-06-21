@@ -78,7 +78,7 @@ class BagDB(object):
             while self._items:
                 cur = self._items.pop()
                 # Keep all the elements until we reach the selected one
-                if cur != element:
+                if cur != item:
                     tmp.append(cur)
                 # We found the removable element, stop here
                 else:
