@@ -25,5 +25,9 @@ class Utils():
         return [i for i in cls.__dict__.keys() if i[:1] != '_']
 
     @staticmethod
+    def enum_values(cls):
+        return [i[1] for i in cls.__dict__.items() if i[0][0] != '_']
+
+    @staticmethod
     def get_enum_name(cls, index):
         return Utils.enum_names(cls)[index]
