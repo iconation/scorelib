@@ -125,7 +125,7 @@ class LinkedListDB:
     def _node(self, node_id) -> _NodeDB:
         return _NodeDB(str(node_id) + self._name, self._db, self._value_type)
 
-    def _create_node(self, value, node_id: int = None) -> _NodeDB:
+    def _create_node(self, value, node_id: int = None) -> tuple:
         if node_id is None:
             node_id = IdFactory(self._name + '_nodedb', self._db).get_uid()
 
@@ -136,7 +136,7 @@ class LinkedListDB:
             raise LinkedNodeAlreadyExists(self._name, node_id)
 
         node.set_value(value)
-        return (node_id, node)
+        return node_id, node
 
     def _get_node(self, node_id: int) -> _NodeDB:
         node = self._node(node_id)
