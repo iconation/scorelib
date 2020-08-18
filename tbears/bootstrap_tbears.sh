@@ -1,0 +1,15 @@
+#!/bin/bash
+
+./tbears/clear_tbears.sh
+
+tbears sync_mainnet
+mv .statedb ./tbears
+mv .score ./tbears
+
+./tbears/start_tbears.sh
+
+tbears transfer -f hxe7af5fcfd8dfc67530a01a0e403882687528dfcb hxba2e54b54b695085f31ff1a9b33868b5aea44e33 413696000000000000000000
+tbears transfer -f hxe7af5fcfd8dfc67530a01a0e403882687528dfcb hx49a4aead36b9236c82e3c5ae34a236dae989d3b1 413696000000000000000000
+tbears transfer -f hxe7af5fcfd8dfc67530a01a0e403882687528dfcb hx8e88177581684a939d413b25a06c31738d6205b9 413696000000000000000000
+tbears transfer -f hxe7af5fcfd8dfc67530a01a0e403882687528dfcb hx24e8f0b5f744b90a78b47add2021a8e6c30b873c 413696000000000000000000
+tbears transfer -f hxe7af5fcfd8dfc67530a01a0e403882687528dfcb hx8fc813c86f0ea9eb532a9aa5bef6b1bfcced1ad7 413696000000000000000000
