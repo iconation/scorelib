@@ -18,6 +18,7 @@ from iconservice import *
 from .exception import *
 from .auth import *
 from .utils import *
+from .state import *
 
 
 class ScoreInMaintenanceException(Exception):
@@ -25,8 +26,9 @@ class ScoreInMaintenanceException(Exception):
 
 
 class IconScoreMaintenanceStatus:
-    DISABLED = 0
-    ENABLED = 1
+    UNINITIALIZED = 0
+    DISABLED = 1
+    ENABLED = 2
 
 
 class IconScoreMaintenance:
@@ -38,10 +40,16 @@ class IconScoreMaintenance:
     # ================================================
     @property
     def _status(self):
-        return VarDB(f'{IconScoreMaintenance._NAME}_MODE', self.db, value_type=int)
+        return StateDB(f'{IconScoreMaintenance._NAME}_MODE', self.db, IconScoreMaintenanceStatus)
 
     # ================================================
     #  Internal methods
+    # ================================================
+    def on_install_maintenance_manager(self, status: int = IconScoreMaintenanceStatus.DISABLED) -> None:
+        self._status.set(status)
+
+    # ================================================
+    #  Private methods
     # ================================================
     def _maintenance_is_enabled(self) -> bool:
         return self._status.get() == IconScoreMaintenanceStatus.ENABLED

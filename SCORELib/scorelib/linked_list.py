@@ -136,7 +136,7 @@ class LinkedListDB:
             raise LinkedNodeAlreadyExists(self._name, node_id)
 
         node.set_value(value)
-        return node_id, node
+        return (node_id, node)
 
     def _get_node(self, node_id: int) -> _NodeDB:
         node = self._node(node_id)

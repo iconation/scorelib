@@ -72,3 +72,10 @@ class StateDB:
                 self._name,
                 Utils.enum_names(self._cls)[self._state.get()],
                 Utils.enum_names(self._cls)[state])
+
+    def check_not(self, state: int) -> None:
+        if self._state.get() == state:
+            raise InvalidState(
+                self._name,
+                Utils.enum_names(self._cls)[self._state.get()],
+                Utils.enum_names(self._cls)[state])

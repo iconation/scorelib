@@ -36,7 +36,7 @@ def catch_exception(func):
     def __wrapper(self: object, *args, **kwargs):
         try:
             return func(self, *args, **kwargs)
-        except Exception as e:
+        except BaseException as e:
             Logger.error(repr(e))
             try:
                 # readonly methods cannot emit eventlogs

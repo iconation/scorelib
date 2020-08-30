@@ -33,6 +33,12 @@ class IconScoreVersion:
     # ================================================
     #  Internal methods
     # ================================================
+    def on_install_version_manager(self, version: str) -> None:
+        self._version_update(version)
+
+    def on_update_version_manager(self, version: str) -> None:
+        self._version_update(version)
+
     @staticmethod
     def _as_tuple(version: str) -> tuple:
         parts = []
@@ -51,5 +57,5 @@ class IconScoreVersion:
     # ================================================
     @catch_exception
     @external(readonly=True)
-    def version_number(self) -> str:
+    def get_version_number(self) -> str:
         return self.__number.get()
