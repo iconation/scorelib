@@ -40,6 +40,8 @@ class _NodeDB:
         Its structure is internal and shouldn't be manipulated outside of this module
     """
     _NAME = '_NODEDB'
+    _UNINITIALIZED = 0
+    _INITIALIZED = 1
 
     def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type):
         self._name = var_key + _NodeDB._NAME
@@ -56,13 +58,13 @@ class _NodeDB:
         self._init.remove()
 
     def exists(self) -> bool:
-        return self._init.get() == 1
+        return self._init.get() != _NodeDB._UNINITIALIZED
 
     def get_value(self):
         return self._value.get()
 
     def set_value(self, value) -> None:
-        self._init.set(1)
+        self._init.set(_NodeDB._INITIALIZED)
         self._value.set(value)
 
     def get_next(self) -> int:

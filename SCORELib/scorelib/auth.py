@@ -39,7 +39,7 @@ def only_wallet(func):
     @wraps(func)
     def __wrapper(self: object, *args, **kwargs):
         if self.msg.sender != self.address:
-            raise SenderNotWalletOwnerError(self.address)
+            raise SenderNotWalletOwnerError(self.msg.sender, self.address)
 
         return func(self, *args, **kwargs)
     return __wrapper
@@ -52,7 +52,7 @@ def only_owner(func):
     @wraps(func)
     def __wrapper(self: object, *args, **kwargs):
         if self.msg.sender != self.owner:
-            raise SenderNotScoreOwnerError(self.owner)
+            raise SenderNotScoreOwnerError(self.msg.sender, self.owner)
 
         return func(self, *args, **kwargs)
     return __wrapper

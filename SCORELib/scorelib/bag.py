@@ -23,6 +23,11 @@ class ItemNotFound(Exception):
     pass
 
 
+class BagDBIsNotOrdered(Exception):
+    """ The BagDB should be ordered in order to use that operation """
+    pass
+
+
 class BagDB(object):
     """
     BagDB is an iterable collection of items that may have duplicates.
@@ -43,6 +48,26 @@ class BagDB(object):
 
     def __len__(self) -> int:
         return len(self._items)
+
+    def __getitem__(self, index: int):
+        if not self._order:
+            raise BagDBIsNotOrdered(self._name)
+        return self._items[index]
+
+    def __setitem__(self, index: int, value):
+        if not self._order:
+            raise BagDBIsNotOrdered(self._name)
+        self._items[index] = value
+
+    def first(self):
+        if not self._order:
+            raise BagDBIsNotOrdered(self._name)
+        return self._items[0]
+
+    def last(self):
+        if not self._order:
+            raise BagDBIsNotOrdered(self._name)
+        return self._items[len(self._items) - 1]
 
     def __contains__(self, item) -> bool:
         return item in self._items
