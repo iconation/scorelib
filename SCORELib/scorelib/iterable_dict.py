@@ -32,9 +32,9 @@ class IterableDictDB(object):
 
     _NAME = '_ITERABLE_DICTDB'
 
-    def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type, order=False):
+    def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type, key_type: type, order=False):
         self._name = var_key + IterableDictDB._NAME
-        self._keys = SetDB(f'{self._name}_keys', db, str, order)
+        self._keys = SetDB(f'{self._name}_keys', db, key_type, order)
         self._values = DictDB(f'{self._name}_values', db, value_type)
         self._db = db
 
@@ -57,22 +57,13 @@ class IterableDictDB(object):
         return len(self._keys)
 
     def __setitem__(self, key: str, value) -> None:
-        if type(key) != str:
-            raise InvalidKeyTypeException("IterableDictDB keys must be str")
-
         self._keys.add(key)
         self._values[key] = value
 
     def __getitem__(self, key: str):
-        if type(key) != str:
-            raise InvalidKeyTypeException("IterableDictDB keys must be str")
-
         return self._values[key]
 
     def __delitem__(self, key: str):
-        if type(key) != str:
-            raise InvalidKeyTypeException("IterableDictDB keys must be str")
-
         del self._values[key]
         self._keys.remove(key)
 
