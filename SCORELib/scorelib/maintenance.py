@@ -39,23 +39,14 @@ class IconScoreMaintenance:
     #  Fields
     # ================================================
     @property
-    def _status(self):
+    def _state(self) -> StateDB:
         return StateDB(f'{IconScoreMaintenance._NAME}_MODE', self.db, IconScoreMaintenanceStatus)
 
     # ================================================
     #  Internal methods
     # ================================================
-    def on_install_maintenance_manager(self, status: int = IconScoreMaintenanceStatus.DISABLED) -> None:
-        self._status.set(status)
-
-    # ================================================
-    #  Private methods
-    # ================================================
-    def _maintenance_is_enabled(self) -> bool:
-        return self._status.get() == IconScoreMaintenanceStatus.ENABLED
-
-    def _maintenance_is_disabled(self) -> bool:
-        return self._status.get() == IconScoreMaintenanceStatus.DISABLED
+    def maintenance_is_enabled(self) -> bool:
+        return self._state.get() == IconScoreMaintenanceStatus.ENABLED
 
     # ================================================
     #  External methods
@@ -64,18 +55,18 @@ class IconScoreMaintenance:
     @external
     @only_owner
     def maintenance_enable(self) -> None:
-        self._status.set(IconScoreMaintenanceStatus.ENABLED)
+        self._state.set(IconScoreMaintenanceStatus.ENABLED)
 
     @catch_exception
     @external
     @only_owner
     def maintenance_disable(self) -> None:
-        self._status.set(IconScoreMaintenanceStatus.DISABLED)
+        self._state.set(IconScoreMaintenanceStatus.DISABLED)
 
     @catch_exception
     @external(readonly=True)
     def maintenance_status(self) -> str:
-        return Utils.get_enum_name(IconScoreMaintenanceStatus, self._status.get())
+        return Utils.get_enum_name(IconScoreMaintenanceStatus, self._state.get())
 
 
 # --- Wrapper ---
@@ -85,7 +76,7 @@ def check_maintenance(func):
 
     @wraps(func)
     def __wrapper(self: object, *args, **kwargs):
-        if self._maintenance_is_enabled():
+        if self.maintenance_is_enabled():
             raise ScoreInMaintenanceException
 
         return func(self, *args, **kwargs)

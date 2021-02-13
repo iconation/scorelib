@@ -19,7 +19,13 @@ from .auth import *
 from .exception import *
 
 
-class IconScoreVersion:
+class ABCIconScoreVersion(ABC):
+    @abstractmethod
+    def get_version_number(self) -> str:
+        pass
+
+
+class IconScoreVersion(ABCIconScoreVersion):
 
     _NAME = 'SCORE_VERSION'
 
@@ -31,26 +37,23 @@ class IconScoreVersion:
         return VarDB(f'{IconScoreVersion._NAME}_NUMBER', self.db, value_type=str)
 
     # ================================================
-    #  Internal methods
+    #  Private methods
     # ================================================
-    def on_install_version_manager(self, version: str) -> None:
-        self._version_update(version)
-
-    def on_update_version_manager(self, version: str) -> None:
-        self._version_update(version)
-
     @staticmethod
-    def _as_tuple(version: str) -> tuple:
+    def __as_tuple(version: str) -> tuple:
         parts = []
         for part in version.split('.'):
             parts.append(int(part))
         return tuple(parts)
 
-    def _version_update(self, version: str) -> None:
+    # ================================================
+    #  Internal methods
+    # ================================================
+    def version_update(self, version: str) -> None:
         self.__number.set(version)
 
-    def _is_less_than_target_version(self, target: str) -> bool:
-        return IconScoreVersion._as_tuple(self.__number.get()) < IconScoreVersion._as_tuple(target)
+    def is_less_than_target_version(self, target: str) -> bool:
+        return IconScoreVersion.__as_tuple(self.__number.get()) < IconScoreVersion.__as_tuple(target)
 
     # ================================================
     #  External methods
