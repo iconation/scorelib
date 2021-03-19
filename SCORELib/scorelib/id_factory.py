@@ -18,7 +18,7 @@ from iconservice import *
 
 
 class IdFactory:
-    """ IdFactory is able to generate unique identifiers for a collection of items. """
+    # IdFactory is able to generate unique identifiers for a collection of items.
 
     _NAME = '_ID_FACTORY'
 

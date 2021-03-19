@@ -36,9 +36,9 @@ class LinkedNodeCannotMoveItself(Exception):
 
 
 class _NodeDB:
-    """ NodeDB is an item of the LinkedListDB
-        Its structure is internal and shouldn't be manipulated outside of this module
-    """
+    # NodeDB is an item of the LinkedListDB
+    # Its structure is internal and shouldn't be manipulated outside of this module
+    
     _NAME = '_NODEDB'
     _UNINITIALIZED = 0
     _INITIALIZED = 1
@@ -81,11 +81,10 @@ class _NodeDB:
 
 
 class LinkedListDB:
-    """ LinkedListDB is an iterable collection of items double linked by unique IDs.
-        Order of retrieval is preserved.
-        Circular linked listing or duplicates nodes in the same linkedlist is *not allowed*
-        in order to prevent infinite loops.
-    """
+    # LinkedListDB is an iterable collection of items double linked by unique IDs.
+    # Order of retrieval is preserved.
+    # Circular linked listing or duplicates nodes in the same linkedlist is *not allowed*
+    # in order to prevent infinite loops.
 
     _NAME = '_LINKED_LISTDB'
 
@@ -159,20 +158,20 @@ class LinkedListDB:
         return self._get_node(head_id)
 
     def node_value(self, cur_id: int):
-        """ Returns the value of a given node id """
+        # Returns the value of a given node id 
         return self._get_node(cur_id).get_value()
 
     def head_value(self):
-        """ Returns the value of the head of the linkedlist """
+        # Returns the value of the head of the linkedlist 
         return self.node_value(self._head_id.get())
 
     def tail_value(self):
-        """ Returns the value of the tail of the linkedlist """
+        # Returns the value of the tail of the linkedlist 
         return self.node_value(self._tail_id.get())
 
     def next(self, cur_id: int) -> int:
-        """ Get the next node id from a given node
-            Raises StopIteration if it doesn't exist """
+        # Get the next node id from a given node
+        # Raises StopIteration if it doesn't exist 
         node = self._get_node(cur_id)
         next_id = node.get_next()
         if not next_id:
@@ -180,8 +179,8 @@ class LinkedListDB:
         return next_id
 
     def prev(self, cur_id: int) -> int:
-        """ Get the next node id from a given node
-            Raises StopIteration if it doesn't exist """
+        # Get the next node id from a given node
+        # Raises StopIteration if it doesn't exist 
         node = self._get_node(cur_id)
         prev_id = node.get_prev()
         if not prev_id:
@@ -189,7 +188,7 @@ class LinkedListDB:
         return prev_id
 
     def clear(self) -> None:
-        """ Delete all nodes from the linkedlist """
+        # Delete all nodes from the linkedlist 
         cur_id = self._head_id.get()
         if not cur_id:
             # Empty list
@@ -214,7 +213,7 @@ class LinkedListDB:
         self._length.set(0)
 
     def append(self, value, node_id: int = None) -> int:
-        """ Append an element at the end of the linkedlist """
+        # Append an element at the end of the linkedlist 
         cur_id, cur = self._create_node(value, node_id)
 
         if self._length.get() == 0:
@@ -234,7 +233,7 @@ class LinkedListDB:
         return cur_id
 
     def prepend(self, value, node_id: int = None) -> int:
-        """ Prepend an element at the beginning of the linkedlist """
+        # Prepend an element at the beginning of the linkedlist 
         cur_id, cur = self._create_node(value, node_id)
 
         if self._length.get() == 0:
@@ -254,7 +253,7 @@ class LinkedListDB:
         return cur_id
 
     def append_after(self, value, after_id: int, node_id: int = None) -> int:
-        """ Append an element after an existing item of the linkedlist """
+        # Append an element after an existing item of the linkedlist 
         if after_id == self._tail_id.get():
             return self.append(value, node_id)
 
@@ -277,7 +276,7 @@ class LinkedListDB:
         return cur_id
 
     def prepend_before(self, value, before_id: int, node_id: int = None) -> int:
-        """ Append an element before an existing item of the linkedlist """
+        # Append an element before an existing item of the linkedlist 
         if before_id == self._head_id.get():
             return self.prepend(value, node_id)
 
@@ -300,7 +299,7 @@ class LinkedListDB:
         return cur_id
 
     def move_node_after(self, cur_id: int, after_id: int) -> None:
-        """ Move an existing node after another existing node """
+        # Move an existing node after another existing node 
         if cur_id == after_id:
             raise LinkedNodeCannotMoveItself(self._name, cur_id)
 
@@ -345,7 +344,7 @@ class LinkedListDB:
         cur.set_prev(after_id)
 
     def move_node_before(self, cur_id: int, before_id: int) -> None:
-        """ Move an existing node before another existing node """
+        # Move an existing node before another existing node 
         if cur_id == before_id:
             raise LinkedNodeCannotMoveItself(self._name, cur_id)
 
@@ -390,7 +389,7 @@ class LinkedListDB:
         cur.set_prev(beforeprev_id)
 
     def move_node_tail(self, cur_id: int) -> None:
-        """ Move an existing node at the tail of the linkedlist """
+        # Move an existing node at the tail of the linkedlist 
         if cur_id == self._tail_id.get():
             raise LinkedNodeCannotMoveItself(self._name, cur_id)
 
@@ -414,7 +413,7 @@ class LinkedListDB:
         self._tail_id.set(cur_id)
 
     def move_node_head(self, cur_id: int) -> None:
-        """ Move an existing node at the head of the linkedlist """
+        # Move an existing node at the head of the linkedlist 
         if cur_id == self._head_id.get():
             raise LinkedNodeCannotMoveItself(self._name, cur_id)
 
@@ -438,7 +437,7 @@ class LinkedListDB:
         self._head_id.set(cur_id)
 
     def remove_head(self) -> None:
-        """ Remove the current head from the linkedlist """
+        # Remove the current head from the linkedlist 
         if self._length.get() == 1:
             self.clear()
         else:
@@ -450,7 +449,7 @@ class LinkedListDB:
             self._length.set(self._length.get() - 1)
 
     def remove_tail(self) -> None:
-        """ Remove the current tail from the linkedlist """
+        # Remove the current tail from the linkedlist 
         if self._length.get() == 1:
             self.clear()
         else:
@@ -462,7 +461,7 @@ class LinkedListDB:
             self._length.set(self._length.get() - 1)
 
     def remove(self, cur_id: int) -> None:
-        """ Remove a given node from the linkedlist """
+        # Remove a given node from the linkedlist 
         if cur_id == self._head_id.get():
             self.remove_head()
 
@@ -481,7 +480,7 @@ class LinkedListDB:
             self._length.set(self._length.get() - 1)
 
     def select(self, offset: int, cond=None, **kwargs) -> list:
-        """ Returns a limited amount of items in the LinkedListDB that optionally fulfills a condition """
+        # Returns a limited amount of items in the LinkedListDB that optionally fulfills a condition 
         items = iter(self)
         result = []
 
@@ -510,13 +509,12 @@ class LinkedListDB:
 
 
 class UIDLinkedListDB(LinkedListDB):
-    """
-        UIDLinkedListDB is a linked list of unique IDs.
-        The linkedlist node ID is equal to the value of the UID provided,
-        so the developer needs to make sure the UID provided is globally unique to the application.
-        Consequently, the concept of node ID is merged with the UID provided
-        from a developper point of view, which simplifies the usage of the linkedlist.
-    """
+    # UIDLinkedListDB is a linked list of unique IDs.
+    # The linkedlist node ID is equal to the value of the UID provided,
+    # so the developer needs to make sure the UID provided is globally unique to the application.
+    # Consequently, the concept of node ID is merged with the UID provided
+    # from a developper point of view, which simplifies the usage of the linkedlist.
+    
     _NAME = 'UID_LINKED_LIST_DB'
 
     def __init__(self, address: Address, db: IconScoreDatabase):

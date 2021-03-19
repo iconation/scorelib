@@ -19,20 +19,18 @@ from .consts import *
 
 
 class ItemNotFound(Exception):
-    """ Cannot find an entry in the collection """
+    # Cannot find an entry in the collection 
     pass
 
 
 class BagDBIsNotOrdered(Exception):
-    """ The BagDB should be ordered in order to use that operation """
+    # The BagDB should be ordered in order to use that operation 
     pass
 
 
 class BagDB(object):
-    """
-    BagDB is an iterable collection of items that may have duplicates.
-    Order of retrieval is *optionally* significant (*not* significant by default)
-    """
+    # BagDB is an iterable collection of items that may have duplicates.
+    # Order of retrieval is *optionally* significant (*not* significant by default)
 
     _NAME = '_BAGDB'
 
@@ -77,7 +75,7 @@ class BagDB(object):
             raise ItemNotFound(self._name, str(item))
 
     def count(self, item) -> int:
-        """ Returns the number of occurences of a given item in the bag """
+        # Returns the number of occurences of a given item in the bag 
         count = 0
         for cur in self._items:
             if cur == item:
@@ -85,18 +83,18 @@ class BagDB(object):
         return count
 
     def add(self, item) -> None:
-        """ Adds an item in the bag """
+        # Adds an item in the bag 
         self._items.put(item)
 
     def clear(self) -> None:
-        """ Removes all the items from the bag """
+        # Removes all the items from the bag 
         while self._items:
             self._items.pop()
 
     def remove(self, item) -> None:
-        """ This operation removes a given item from the bag.
-            If the item does not exist, it *does not raise* a KeyError.
-        """
+        # This operation removes a given item from the bag.
+        # If the item does not exist, it *does not raise* a KeyError.
+        
         if self._order:
             # Remove from the ArrayDB (ordered)
             tmp = []
@@ -127,7 +125,7 @@ class BagDB(object):
                     return
 
     def select(self, offset: int, cond=None, **kwargs) -> list:
-        """ Returns a limited amount of items in the BagDB that optionally fulfills a condition """
+        # Returns a limited amount of items in the BagDB that optionally fulfills a condition 
         items = iter(self._items)
         result = []
 
