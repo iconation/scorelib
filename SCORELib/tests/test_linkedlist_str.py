@@ -45,7 +45,9 @@ class Test(IconIntegrateTestBase):
         self._operator = self._test1
         self._score_address = self._deploy_score(self.SCORE_PROJECT)['scoreAddress']
         self._user = self._wallet_array[0]
-        self._attacker = self._wallet_array[1]
+        self._user2 = self._wallet_array[1]
+        self._user3 = self._wallet_array[1]
+        self._attacker = self._wallet_array[2]
 
         for wallet in self._wallet_array:
             icx_transfer_call(super(), self._test1, wallet.get_address(), 100 * 10**18, self.icon_service)
@@ -78,12 +80,12 @@ class Test(IconIntegrateTestBase):
         return result
 
     # ===============================================================
-    def test_length(self):
+    def test_append_1(self):
         length = icx_call(
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_length',
+            method='linkedlistdb_str_length',
             icon_service=self.icon_service
         )
         self.assertTrue(int(length, 16) == 0)
@@ -92,33 +94,15 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         length = icx_call(
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_length',
-            icon_service=self.icon_service
-        )
-        self.assertTrue(int(length, 16) == 1)
-
-    def test_append_1(self):
-        result = transaction_call_success(
-            super(),
-            from_=self._operator,
-            to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
-            icon_service=self.icon_service
-        )
-        length = icx_call(
-            super(),
-            from_=self._operator.get_address(),
-            to_=self._score_address,
-            method='linkedlistdb_length',
+            method='linkedlistdb_str_length',
             icon_service=self.icon_service
         )
         self.assertTrue(int(length, 16) == 1)
@@ -128,23 +112,23 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         length = icx_call(
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_length',
+            method='linkedlistdb_str_length',
             icon_service=self.icon_service
         )
         self.assertTrue(int(length, 16) == 2)
@@ -154,31 +138,31 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         length = icx_call(
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_length',
+            method='linkedlistdb_str_length',
             icon_service=self.icon_service
         )
         self.assertTrue(int(length, 16) == 3)
@@ -188,24 +172,24 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 3},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user.get_address())},
             icon_service=self.icon_service
         )
 
@@ -213,8 +197,8 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append_after',
-            params={'item': 4, 'after_id': 1},
+            method='linkedlistdb_str_append_after',
+            params={'item': str(self._user2.get_address()), 'after_id': 1},
             icon_service=self.icon_service
         )
 
@@ -222,7 +206,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
@@ -230,34 +214,34 @@ class Test(IconIntegrateTestBase):
         # print(linkedlistdb)
 
         self.assertTrue(len(linkedlistdb) == 4)
-        self.assertTrue(linkedlistdb[0][1] == 1)
-        self.assertTrue(linkedlistdb[1][1] == 4)
-        self.assertTrue(linkedlistdb[2][1] == 2)
-        self.assertTrue(linkedlistdb[3][1] == 3)
+        self.assertTrue(linkedlistdb[0][0] == 1)
+        self.assertTrue(linkedlistdb[1][0] == 4)
+        self.assertTrue(linkedlistdb[2][0] == 2)
+        self.assertTrue(linkedlistdb[3][0] == 3)
 
     def test_next(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 3},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user.get_address())},
             icon_service=self.icon_service
         )
 
@@ -265,7 +249,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_next',
+            method='linkedlistdb_str_next',
             params={'next_id': 1},
             icon_service=self.icon_service
         )
@@ -276,7 +260,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_next',
+            method='linkedlistdb_str_next',
             params={'next_id': 2},
             icon_service=self.icon_service
         )
@@ -288,24 +272,24 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 3},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user.get_address())},
             icon_service=self.icon_service
         )
 
@@ -313,7 +297,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_prev',
+            method='linkedlistdb_str_prev',
             params={'prev_id': 2},
             icon_service=self.icon_service
         )
@@ -324,7 +308,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_prev',
+            method='linkedlistdb_str_prev',
             params={'prev_id': 3},
             icon_service=self.icon_service
         )
@@ -335,39 +319,39 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 3},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 4},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user2.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_move_node_before',
+            method='linkedlistdb_str_move_node_before',
             params={'cur_id': 4, 'before_id': 3},
             icon_service=self.icon_service
         )
@@ -375,7 +359,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
@@ -383,49 +367,49 @@ class Test(IconIntegrateTestBase):
         # print(linkedlistdb)
 
         self.assertTrue(len(linkedlistdb) == 4)
-        self.assertTrue(linkedlistdb[0][1] == 1)
-        self.assertTrue(linkedlistdb[1][1] == 2)
-        self.assertTrue(linkedlistdb[2][1] == 4)
-        self.assertTrue(linkedlistdb[3][1] == 3)
+        self.assertTrue(linkedlistdb[0][0] == 1)
+        self.assertTrue(linkedlistdb[1][0] == 2)
+        self.assertTrue(linkedlistdb[2][0] == 4)
+        self.assertTrue(linkedlistdb[3][0] == 3)
 
     def test_move_node_after_1(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 3},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 4},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user2.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_move_node_after',
+            method='linkedlistdb_str_move_node_after',
             params={'cur_id': 2, 'after_id': 3},
             icon_service=self.icon_service
         )
@@ -433,7 +417,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
@@ -441,49 +425,49 @@ class Test(IconIntegrateTestBase):
         # print(linkedlistdb)
 
         self.assertTrue(len(linkedlistdb) == 4)
-        self.assertTrue(linkedlistdb[0][1] == 1)
-        self.assertTrue(linkedlistdb[1][1] == 3)
-        self.assertTrue(linkedlistdb[2][1] == 2)
-        self.assertTrue(linkedlistdb[3][1] == 4)
+        self.assertTrue(linkedlistdb[0][0] == 1)
+        self.assertTrue(linkedlistdb[1][0] == 3)
+        self.assertTrue(linkedlistdb[2][0] == 2)
+        self.assertTrue(linkedlistdb[3][0] == 4)
 
     def test_move_node_after_2(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 3},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 4},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user2.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_move_node_after',
+            method='linkedlistdb_str_move_node_after',
             params={'cur_id': 1, 'after_id': 2},
             icon_service=self.icon_service
         )
@@ -491,55 +475,55 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
 
         self.assertTrue(len(linkedlistdb) == 4)
-        self.assertTrue(linkedlistdb[0][1] == 2)
-        self.assertTrue(linkedlistdb[1][1] == 1)
-        self.assertTrue(linkedlistdb[2][1] == 3)
-        self.assertTrue(linkedlistdb[3][1] == 4)
+        self.assertTrue(linkedlistdb[0][0] == 2)
+        self.assertTrue(linkedlistdb[1][0] == 1)
+        self.assertTrue(linkedlistdb[2][0] == 3)
+        self.assertTrue(linkedlistdb[3][0] == 4)
 
     def test_move_node_after_3(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 3},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 4},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user2.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_move_node_after',
+            method='linkedlistdb_str_move_node_after',
             params={'cur_id': 2, 'after_id': 1},
             icon_service=self.icon_service
         )
@@ -547,7 +531,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
@@ -555,49 +539,49 @@ class Test(IconIntegrateTestBase):
         # print(linkedlistdb)
 
         self.assertTrue(len(linkedlistdb) == 4)
-        self.assertTrue(linkedlistdb[0][1] == 1)
-        self.assertTrue(linkedlistdb[1][1] == 2)
-        self.assertTrue(linkedlistdb[2][1] == 3)
-        self.assertTrue(linkedlistdb[3][1] == 4)
+        self.assertTrue(linkedlistdb[0][0] == 1)
+        self.assertTrue(linkedlistdb[1][0] == 2)
+        self.assertTrue(linkedlistdb[2][0] == 3)
+        self.assertTrue(linkedlistdb[3][0] == 4)
 
     def test_move_node_before_2(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 3},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 4},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user2.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_move_node_before',
+            method='linkedlistdb_str_move_node_before',
             params={'cur_id': 2, 'before_id': 1},
             icon_service=self.icon_service
         )
@@ -605,7 +589,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
@@ -613,49 +597,49 @@ class Test(IconIntegrateTestBase):
         # print(linkedlistdb)
 
         self.assertTrue(len(linkedlistdb) == 4)
-        self.assertTrue(linkedlistdb[0][1] == 2)
-        self.assertTrue(linkedlistdb[1][1] == 1)
-        self.assertTrue(linkedlistdb[2][1] == 3)
-        self.assertTrue(linkedlistdb[3][1] == 4)
+        self.assertTrue(linkedlistdb[0][0] == 2)
+        self.assertTrue(linkedlistdb[1][0] == 1)
+        self.assertTrue(linkedlistdb[2][0] == 3)
+        self.assertTrue(linkedlistdb[3][0] == 4)
 
     def test_move_node_before_3(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 3},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 4},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user2.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_move_node_before',
+            method='linkedlistdb_str_move_node_before',
             params={'cur_id': 1, 'before_id': 3},
             icon_service=self.icon_service
         )
@@ -663,7 +647,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
@@ -671,49 +655,49 @@ class Test(IconIntegrateTestBase):
         # print(linkedlistdb)
 
         self.assertTrue(len(linkedlistdb) == 4)
-        self.assertTrue(linkedlistdb[0][1] == 2)
-        self.assertTrue(linkedlistdb[1][1] == 1)
-        self.assertTrue(linkedlistdb[2][1] == 3)
-        self.assertTrue(linkedlistdb[3][1] == 4)
+        self.assertTrue(linkedlistdb[0][0] == 2)
+        self.assertTrue(linkedlistdb[1][0] == 1)
+        self.assertTrue(linkedlistdb[2][0] == 3)
+        self.assertTrue(linkedlistdb[3][0] == 4)
 
     def test_move_node_before_4(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 3},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 4},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user2.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_move_node_before',
+            method='linkedlistdb_str_move_node_before',
             params={'cur_id': 4, 'before_id': 3},
             icon_service=self.icon_service
         )
@@ -721,7 +705,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
@@ -729,25 +713,25 @@ class Test(IconIntegrateTestBase):
         # print(linkedlistdb)
 
         self.assertTrue(len(linkedlistdb) == 4)
-        self.assertTrue(linkedlistdb[0][1] == 1)
-        self.assertTrue(linkedlistdb[1][1] == 2)
-        self.assertTrue(linkedlistdb[2][1] == 4)
-        self.assertTrue(linkedlistdb[3][1] == 3)
+        self.assertTrue(linkedlistdb[0][0] == 1)
+        self.assertTrue(linkedlistdb[1][0] == 2)
+        self.assertTrue(linkedlistdb[2][0] == 4)
+        self.assertTrue(linkedlistdb[3][0] == 3)
 
     def test_prepend_1(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_prepend',
-            params={'item': 1},
+            method='linkedlistdb_str_prepend',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         length = icx_call(
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_length',
+            method='linkedlistdb_str_length',
             icon_service=self.icon_service
         )
         self.assertTrue(int(length, 16) == 1)
@@ -756,36 +740,36 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
 
         self.assertTrue(len(linkedlistdb) == 1)
-        self.assertTrue(linkedlistdb[0][1] == 1)
+        self.assertTrue(linkedlistdb[0][0] == 1)
 
     def test_prepend_2(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_prepend',
-            params={'item': 1},
+            method='linkedlistdb_str_prepend',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_prepend',
-            params={'item': 1},
+            method='linkedlistdb_str_prepend',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         length = icx_call(
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_length',
+            method='linkedlistdb_str_length',
             icon_service=self.icon_service
         )
         self.assertTrue(int(length, 16) == 2)
@@ -793,45 +777,45 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
 
         self.assertTrue(len(linkedlistdb) == 2)
-        self.assertTrue(linkedlistdb[0][1] == 1)
-        self.assertTrue(linkedlistdb[1][1] == 1)
+        self.assertTrue(str(linkedlistdb[0][1]) == self._operator.get_address())
+        self.assertTrue(str(linkedlistdb[1][1]) == self._operator.get_address())
 
     def test_prepend_3(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_prepend',
-            params={'item': 1},
+            method='linkedlistdb_str_prepend',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_prepend',
-            params={'item': 1},
+            method='linkedlistdb_str_prepend',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_prepend',
-            params={'item': 2},
+            method='linkedlistdb_str_prepend',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         length = icx_call(
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_length',
+            method='linkedlistdb_str_length',
             icon_service=self.icon_service
         )
         self.assertTrue(int(length, 16) == 3)
@@ -839,39 +823,39 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
 
         self.assertTrue(len(linkedlistdb) == 3)
-        self.assertTrue(linkedlistdb[0][1] == 1)
-        self.assertTrue(linkedlistdb[1][1] == 1)
-        self.assertTrue(linkedlistdb[2][1] == 2)
+        self.assertTrue(str(linkedlistdb[0][1]) == self._operator.get_address())
+        self.assertTrue(str(linkedlistdb[1][1]) == self._operator.get_address())
+        self.assertTrue(str(linkedlistdb[2][1]) == self._user3.get_address())
 
     def test_prepend_before_1(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 3},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user.get_address())},
             icon_service=self.icon_service
         )
 
@@ -879,8 +863,8 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_prepend_before',
-            params={'item': 4, 'before_id': 1},
+            method='linkedlistdb_str_prepend_before',
+            params={'item': str(self._user2.get_address()), 'before_id': 1},
             icon_service=self.icon_service
         )
 
@@ -888,7 +872,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
@@ -896,34 +880,34 @@ class Test(IconIntegrateTestBase):
         # print(linkedlistdb)
 
         self.assertTrue(len(linkedlistdb) == 4)
-        self.assertTrue(linkedlistdb[0][1] == 4)
-        self.assertTrue(linkedlistdb[1][1] == 1)
-        self.assertTrue(linkedlistdb[2][1] == 2)
-        self.assertTrue(linkedlistdb[3][1] == 3)
+        self.assertTrue(linkedlistdb[0][0] == 4)
+        self.assertTrue(linkedlistdb[1][0] == 1)
+        self.assertTrue(linkedlistdb[2][0] == 2)
+        self.assertTrue(linkedlistdb[3][0] == 3)
 
     def test_prepend_before_2(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 3},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user.get_address())},
             icon_service=self.icon_service
         )
 
@@ -931,8 +915,8 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_prepend_before',
-            params={'item': 4, 'before_id': 3},
+            method='linkedlistdb_str_prepend_before',
+            params={'item': str(self._user2.get_address()), 'before_id': 3},
             icon_service=self.icon_service
         )
 
@@ -940,7 +924,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
@@ -948,34 +932,34 @@ class Test(IconIntegrateTestBase):
         # print(linkedlistdb)
 
         self.assertTrue(len(linkedlistdb) == 4)
-        self.assertTrue(linkedlistdb[0][1] == 1)
-        self.assertTrue(linkedlistdb[1][1] == 2)
-        self.assertTrue(linkedlistdb[2][1] == 4)
-        self.assertTrue(linkedlistdb[3][1] == 3)
+        self.assertTrue(linkedlistdb[0][0] == 1)
+        self.assertTrue(linkedlistdb[1][0] == 2)
+        self.assertTrue(linkedlistdb[2][0] == 4)
+        self.assertTrue(linkedlistdb[3][0] == 3)
 
     def test_append_after_2(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 3},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user.get_address())},
             icon_service=self.icon_service
         )
 
@@ -983,8 +967,8 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append_after',
-            params={'item': 4, 'after_id': 3},
+            method='linkedlistdb_str_append_after',
+            params={'item': str(self._user2.get_address()), 'after_id': 3},
             icon_service=self.icon_service
         )
 
@@ -992,7 +976,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
@@ -1000,48 +984,48 @@ class Test(IconIntegrateTestBase):
         # print(linkedlistdb)
 
         self.assertTrue(len(linkedlistdb) == 4)
-        self.assertTrue(linkedlistdb[0][1] == 1)
-        self.assertTrue(linkedlistdb[1][1] == 2)
-        self.assertTrue(linkedlistdb[2][1] == 3)
-        self.assertTrue(linkedlistdb[3][1] == 4)
+        self.assertTrue(linkedlistdb[0][0] == 1)
+        self.assertTrue(linkedlistdb[1][0] == 2)
+        self.assertTrue(linkedlistdb[2][0] == 3)
+        self.assertTrue(linkedlistdb[3][0] == 4)
 
     def test_clear(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_clear',
+            method='linkedlistdb_str_clear',
             icon_service=self.icon_service
         )
         length = icx_call(
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_length',
+            method='linkedlistdb_str_length',
             icon_service=self.icon_service
         )
         self.assertTrue(int(length, 16) == 0)
@@ -1051,23 +1035,23 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_remove',
+            method='linkedlistdb_str_remove',
             params={'node_id': 1},
             icon_service=self.icon_service
         )
@@ -1075,7 +1059,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_length',
+            method='linkedlistdb_str_length',
             icon_service=self.icon_service
         )
         self.assertTrue(int(length, 16) == 1)
@@ -1085,15 +1069,15 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_remove',
+            method='linkedlistdb_str_remove',
             params={'node_id': 1},
             icon_service=self.icon_service
         )
@@ -1101,7 +1085,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_length',
+            method='linkedlistdb_str_length',
             icon_service=self.icon_service
         )
         self.assertTrue(int(length, 16) == 0)
@@ -1111,8 +1095,8 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         wrong_item = 2
@@ -1120,7 +1104,7 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_remove',
+            method='linkedlistdb_str_remove',
             params={'node_id': wrong_item},
             icon_service=self.icon_service
         )
@@ -1131,16 +1115,16 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
 
@@ -1148,8 +1132,8 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_select',
-            params={'offset': 0, 'match': 1},
+            method='linkedlistdb_str_select',
+            params={'offset': 0, 'match': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
 
@@ -1160,46 +1144,46 @@ class Test(IconIntegrateTestBase):
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 3},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 4},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user2.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_remove_head',
+            method='linkedlistdb_str_remove_head',
             icon_service=self.icon_service
         )
         linkedlistdb = icx_call(
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
@@ -1207,55 +1191,55 @@ class Test(IconIntegrateTestBase):
         # print(linkedlistdb)
 
         self.assertTrue(len(linkedlistdb) == 3)
-        self.assertTrue(linkedlistdb[0][1] == 2)
-        self.assertTrue(linkedlistdb[1][1] == 3)
-        self.assertTrue(linkedlistdb[2][1] == 4)
+        self.assertTrue(linkedlistdb[0][0] == 2)
+        self.assertTrue(linkedlistdb[1][0] == 3)
+        self.assertTrue(linkedlistdb[2][0] == 4)
 
     def test_remove_tail(self):
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 1},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._operator.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 2},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user3.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 3},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_append',
-            params={'item': 4},
+            method='linkedlistdb_str_append',
+            params={'item': str(self._user2.get_address())},
             icon_service=self.icon_service
         )
         result = transaction_call_success(
             super(),
             from_=self._operator,
             to_=self._score_address,
-            method='linkedlistdb_remove_tail',
+            method='linkedlistdb_str_remove_tail',
             icon_service=self.icon_service
         )
         linkedlistdb = icx_call(
             super(),
             from_=self._operator.get_address(),
             to_=self._score_address,
-            method='linkedlistdb_selectall',
+            method='linkedlistdb_str_selectall',
             params={'offset': 0},
             icon_service=self.icon_service
         )
@@ -1263,6 +1247,6 @@ class Test(IconIntegrateTestBase):
         # print(linkedlistdb)
 
         self.assertTrue(len(linkedlistdb) == 3)
-        self.assertTrue(linkedlistdb[0][1] == 1)
-        self.assertTrue(linkedlistdb[1][1] == 2)
-        self.assertTrue(linkedlistdb[2][1] == 3)
+        self.assertTrue(linkedlistdb[0][0] == 1)
+        self.assertTrue(linkedlistdb[1][0] == 2)
+        self.assertTrue(linkedlistdb[2][0] == 3)

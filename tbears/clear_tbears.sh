@@ -5,4 +5,5 @@ pkill gunicorn
 tbears clear
 
 rm -rf .statedb/ .score/ precommit/
-rm -rf ./tbears/*
+
+find ./tbears -type f -not -name '*.sh' -delete
