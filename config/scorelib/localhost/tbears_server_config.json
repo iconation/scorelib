@@ -1,12 +1,12 @@
 {
     "hostAddress": "127.0.0.1",
     "port": 9000,
-    "scoreRootPath": "../.score",
-    "stateDbRootPath": "../.statedb",
+    "scoreRootPath": "./tbears/.score",
+    "stateDbRootPath": "./tbears/.statedb",
     "log": {
         "logger": "tbears",
         "level": "warning",
-        "filePath": "./logs/tbears.log",
+        "filePath": "./tbears/logs/tbears.log",
         "colorLog": true,
         "outputType": "file",
         "rotate": {
@@ -60,6 +60,13 @@
             }
         ]
     },
-    "blockConfirmInterval": 2,
-    "blockConfirmEmpty": true
+    "blockConfirmInterval": 1,
+    "blockConfirmEmpty": true,
+    "blockGeneratorRotation": true,
+    "blockGenerateCountPerLeader": 10,
+    "blockManualConfirm": false,
+    "networkDelayMs": 500,
+    "iissCalculatePeriod": 5,
+    "termPeriod": 5,
+    "mainPRepCount": 4
 }
