@@ -200,7 +200,7 @@ def transaction_call_error(icon_integrate_test_base: IconIntegrateTestBase,
     transaction = CallTransactionBuilder() \
         .from_(from_.get_address()) \
         .to(to_) \
-        .step_limit(10_000_000) \
+        .step_limit(100_000_000_000) \
         .nid(3) \
         .nonce(100) \
         .method(method) \
@@ -216,6 +216,18 @@ def transaction_call_error(icon_integrate_test_base: IconIntegrateTestBase,
 
     return tx_result
 
+def transaction_call(icon_integrate_test_base: IconIntegrateTestBase,
+                    from_: KeyWallet,
+                    to_: str,
+                    method: str,
+                    params: dict = None,
+                    value: int = 0,
+                    icon_service: IconService = None,
+                    success: bool = True) -> dict:
+    if success:
+        return transaction_call_success(icon_integrate_test_base, from_, to_, method, params, value, icon_service)
+    else:
+        return transaction_call_error(icon_integrate_test_base, from_, to_, method, params, value, icon_service)
 
 def icx_transfer_call(icon_integrate_test_base: IconIntegrateTestBase,
                       from_: KeyWallet,
@@ -235,7 +247,7 @@ def icx_transfer_call(icon_integrate_test_base: IconIntegrateTestBase,
     transaction = TransactionBuilder() \
         .from_(from_.get_address()) \
         .to(to_) \
-        .step_limit(10_000_000) \
+        .step_limit(100_000_000_000) \
         .nid(3) \
         .nonce(100) \
         .value(value) \

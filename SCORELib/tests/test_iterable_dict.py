@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2020 ICONation
+# Copyright 2021 ICONation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -274,7 +274,7 @@ class Test(IconIntegrateTestBase):
             params={'key': 'mykey1'},
             icon_service=self.icon_service
         )
-        self.assertEqual(result['failure']['message'], f"ItemNotFound('ITERABLEDICT_ITERABLE_DICTDB_keys_SETDB', 'mykey1')")
+        self.assertEqual(result['failure']['message'], f"ItemNotFound('ITERABLEDICT_ITERABLE_DICTDB', 'mykey1')")
 
     def test_select_1(self):
         result = transaction_call_success(
