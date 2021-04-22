@@ -22,6 +22,8 @@ from .scorelib.linked_list import *
 from .scorelib.id_factory import *
 from .scorelib.iterable_dict import *
 from .scorelib.binary_tree import *
+from .scorelib.shard import *
+from .scorelib.container_util import *
 
 
 class SCORELib(IconScoreBase):
@@ -48,6 +50,10 @@ class SCORELib(IconScoreBase):
     @catch_exception
     def setdb(self) -> SetDB:
         return SetDB('SET', self.db, int)
+
+    @catch_exception
+    def sharddb(self) -> ShardDB:
+        return ShardDB('SHARD', self.db)
 
     @catch_exception
     def linkedlistdb(self) -> LinkedListDB:
@@ -686,3 +692,28 @@ class SCORELib(IconScoreBase):
         result = []
         self.binarytree().traverse_pre_order(root, self.binarytree_callback, result=result)
         return result
+
+    # ================================================
+    #  ShardDB External methods
+    # ================================================
+    @catch_exception
+    @external
+    def shard_set(self, key: str, value: int) -> None:
+        sharddb: ShardDB = self.sharddb()
+        sharddb.set(key, value)
+        sharddb.set(b'test', 123)
+        sharddb.serialize()
+
+    @catch_exception
+    @external
+    def shard_multiset(self, count: int) -> None:
+        sharddb: ShardDB = self.sharddb()
+        for i in range(count):
+            sharddb.set(str(i), sha3_256(ContainerUtil.int_to_bytes(i)))
+        sharddb.serialize()
+
+    @catch_exception
+    @external(readonly=True)
+    def shard_get(self, key: str):
+        sharddb: ShardDB = self.sharddb()
+        return sharddb.get(key)
