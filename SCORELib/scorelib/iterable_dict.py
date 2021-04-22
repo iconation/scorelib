@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2020 ICONation
+# Copyright 2021 ICONation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -55,7 +55,8 @@ class IterableDictDB(object):
         return len(self._keys)
 
     def __setitem__(self, key: str, value) -> None:
-        self._keys.add(key)
+        if not key in self._values:
+            self._keys.add(key)
         self._values[key] = value
 
     def __getitem__(self, key: str):
