@@ -49,7 +49,7 @@ class IterableDictDB(object):
             yield self._values[key]
 
     def __contains__(self, key) -> bool:
-        return key in self._keys
+        return key in self._values
 
     def __len__(self) -> int:
         return len(self._keys)
