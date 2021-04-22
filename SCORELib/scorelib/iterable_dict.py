@@ -15,7 +15,7 @@
 # limitations under the License.
 
 from iconservice import *
-from .set import *
+from .bag import *
 from .consts import *
 
 
@@ -32,7 +32,7 @@ class IterableDictDB(object):
 
     def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type, key_type: type, order=False):
         self._name = var_key + IterableDictDB._NAME
-        self._keys = SetDB(f'{self._name}_keys', db, key_type, order)
+        self._keys = BagDB(f'{self._name}_keys', db, key_type, order)
         self._values = DictDB(f'{self._name}_values', db, value_type)
         self._db = db
 
@@ -55,7 +55,7 @@ class IterableDictDB(object):
         return len(self._keys)
 
     def __setitem__(self, key: str, value) -> None:
-        if not key in self._values:
+        if not key in self:
             self._keys.add(key)
         self._values[key] = value
 
@@ -63,6 +63,9 @@ class IterableDictDB(object):
         return self._values[key]
 
     def __delitem__(self, key: str):
+        if not key in self:
+            raise ItemNotFound(self._name, str(key))
+
         del self._values[key]
         self._keys.remove(key)
 
