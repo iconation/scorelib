@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2021 ICONation
+# Copyright 2020 ICONation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,34 +27,41 @@ class SetDB(BagDB):
     def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type, order=False):
         name = var_key + SetDB._NAME
         super().__init__(name, db, value_type, order)
+        self._indexes = DictDB(f'{self._name}_indexes', db, value_type=int)
         self._name = name
         self._db = db
+
+    def __contains__(self, item) -> bool:
+        return item in self._indexes
 
     def add(self, item) -> None:
         # Adds an element to the set 
         # If it already exists, it *does not raise* any exception
-        
-        if item not in self._items:
+        if item not in self._indexes:
             super().add(item)
+            self._indexes[item] = len(self)
 
     def remove(self, item) -> None:
         # This operation removes element x from the set.
         # If element x does not exist, it raises a ItemNotFound.
-        
-        if item not in self._items:
+        if item not in self._indexes:
             raise ItemNotFound(self._name, str(item))
+        
+        del self._indexes[item]
         super().remove(item)
 
     def discard(self, item) -> None:
         # This operation also removes element x from the set.
         # If element x does not exist, it *does not raise* a ItemNotFound.
-        
         if item in self._items:
+            del self._indexes[item]
             super().remove(item)
 
     def pop(self):
         # Removes an element from the set and returns it 
-        return self._items.pop()
+        item = self._items.pop()
+        del self._indexes[item]
+        return item
 
     def difference(self, other: set):
         # Returns a set containing the difference between two or more sets 
