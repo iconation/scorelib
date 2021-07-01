@@ -82,7 +82,7 @@ class BinaryTreeDB:
     def _node(self, node_id) -> _BinaryTreeNode:
         return _BinaryTreeNode(str(node_id) + self._name, self._db, self._value_type)
 
-    def _create_node(self, value, node_id: int = None) -> _BinaryTreeNode:
+    def _create_node(self, value, node_id: int = None) -> tuple:
         if node_id is None:
             node_id = IdFactory(self._name + '_node', self._db).get_uid()
 
