@@ -37,7 +37,7 @@ class SetDB(BagDB):
     def add(self, item) -> None:
         # Adds an element to the set 
         # If it already exists, it *does not raise* any exception
-        if item not in self._indexes:
+        if item not in self:
             super().add(item)
             self._indexes[item] = len(self)
 
@@ -53,7 +53,7 @@ class SetDB(BagDB):
     def discard(self, item) -> None:
         # This operation also removes element x from the set.
         # If element x does not exist, it *does not raise* a ItemNotFound.
-        if item in self._items:
+        if item in self:
             del self._indexes[item]
             super().remove(item)
 
