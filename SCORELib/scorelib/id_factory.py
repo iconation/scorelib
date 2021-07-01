@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2021 ICONation
+# Copyright 2020 ICONation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ from iconservice import *
 
 class IdFactory:
     # IdFactory is able to generate unique identifiers for a collection of items.
-
+    
     _NAME = '_ID_FACTORY'
 
     def __init__(self, var_key: str, db: IconScoreDatabase):

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2021 ICONation
+# Copyright 2020 ICONation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,17 +16,6 @@
 
 from iconservice import *
 
-
-class IconScoreExceptionHandler:
-
-    # ================================================
-    #  Event Logs
-    # ================================================
-    @eventlog
-    def ShowException(self, exception: str):
-        pass
-
-
 # --- Wrapper ---
 def catch_exception(func):
     if not isfunction(func):
@@ -38,11 +27,6 @@ def catch_exception(func):
             return func(self, *args, **kwargs)
         except BaseException as e:
             Logger.error(repr(e))
-            try:
-                # readonly methods cannot emit eventlogs
-                self.ShowException(repr(e))
-            except:
-                pass
             revert(repr(e))
 
     return __wrapper

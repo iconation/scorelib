@@ -24,8 +24,6 @@ from iconservice import *
 
 DIR_PATH = os.path.abspath(os.path.dirname(__file__))
 
-from SCORELib.scorelib.shard import ShardDB
-
 def profiler(func):
     @wraps(func)
     def __wrapper(self: object, *args, **kwargs):

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2021 ICONation
+# Copyright 2020 ICONation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -85,6 +85,9 @@ class BagDB(object):
     def add(self, item) -> None:
         # Adds an item in the bag 
         self._items.put(item)
+
+    def pop(self):
+        return self._items.pop()
 
     def clear(self) -> None:
         # Removes all the items from the bag 
